@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
-import Dash from './Dashboard';
+import Dashboard from './Dashboard';
 import Login from './Login';
 
 class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			loggedIn: false
+			loggedIn: true
 		}
 	}
 	handleLogin = () => {
@@ -26,7 +26,7 @@ class App extends Component {
 				{
 					this.state.loggedIn 
 					? 
-					<Dash handleLogout={this.handleLogout} />
+					<Dashboard handleLogout={this.handleLogout} />
 					: 
 					<Login handleLogin={this.handleLogin} />
 				}
