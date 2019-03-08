@@ -4,7 +4,7 @@ const Settings = (props) => {
 	return (
 		<div className="settings-wrap">
 			<h1>Your Account Settings</h1>
-			<button onClick={props.hideAccountSettings}>Go back to my dash!</button>
+			<button onClick={props.closeSettings}>Go back to my dash!</button>
 			<div>
 				<form className="settings-form" onSubmit={props.updateAccount}>
 					<label>Username: <br />

@@ -1,13 +1,21 @@
 import React from 'react';
+import '../App.css';
+import './index.css';
+import Settings from '../Settings';
 
 class Dashboard extends React.Component {
 	constructor() {
 		super();
 		this.state = {
 			logs: [],
-			account: [],
-			accountSettingsOpen: false,
-			dashClassName: ''
+			account: {
+				username: '',
+				email: '',
+				firstName: '',
+				lastName: ''
+			},
+			accountSettingsClassName: 'display-none',
+			dashClassName: 'logs-dash'
 		}
 	}
 	componentDidMount = async () => {
@@ -37,18 +45,29 @@ class Dashboard extends React.Component {
 		}
 		const response = await account.json();
 		this.setState({
-			account: response.data,
-			accountSettingsOpen: true
+			account: {
+				username: response.data.username,
+				email: response.data.email,
+				firstName: response.data.firstName,
+				lastName: response.data.lastName
+			},
+			accountSettingsClassName: "account-settings",
+			dashClassName: "display-none"
 		})
 	}
-	hideAccountSettings = () => {
+	setSettingsClassDisplayNone = () => {
 		this.setState({
-			account: '',
-			accountSettingsOpen: false
+			accountSettingsClassName: "display-none",
+			dashClassName: "logs-dash"
 		})
+	}
+	handleChange = (e) => {
+		this.setState({
+			[e.target.name]: e.target.value
+		});
 	}
 	render() {
-		console.log(this.state.logs)
+		console.log(this.state)
 		const logs = this.state.logs.map((log, i) => {
 			return <li key={i}>
 				{log.author} <br />
@@ -57,19 +76,23 @@ class Dashboard extends React.Component {
 			</li>
 		})
 		return (
-			<div className="logs-dash" {this.state.dashClassName}>
-				<h1>this is your dashboard</h1>
-				<div className="logs">
-					<ul>
-						{logs}
-					</ul>
+			<div className="dash-wrap">
+				<div className={this.state.dashClassName}>
+					<h1>this is your dashboard</h1>
+					<div className="logs">
+						<ul>
+							{logs}
+						</ul>
+					</div>
+					<button onClick={this.showAccountSettings}>click this to show account settings</button>
+				</div>
+				<div className={this.state.accountSettingsClassName}>
+					<Settings account={this.state.account} 
+					closeSettings={this.setSettingsClassDisplayNone} 
+					handleChange={this.handleChange}
+					updateAccount={this.updateAccount}/>
 				</div>
 			</div>
-			{ this.state.accountSettingsOpen ? 
-				<Settings account={this.state.account} 
-				closeSettings={this.hideAccountSettings}/>
-				: null
-			}
 		)
 	}
 }
