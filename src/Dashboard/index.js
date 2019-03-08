@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
 			</div>
 			{ this.state.accountSettingsOpen ? 
 				<Settings account={this.state.account} 
-				closeSettings={this.closeSettings}/>
+				closeSettings={this.hideAccountSettings}/>
 				: null
 			}
 		)
