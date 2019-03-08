@@ -22,9 +22,19 @@ class Dashboard extends React.Component {
 		})
 	}
 	render() {
+		console.log(this.state.logs)
+		const logs = this.state.logs.map((log, i) => {
+			return <li key={i}>
+				{log.author} <br />
+				{log.createdAt.toString()} <br />
+				{log.content} <br />
+			</li>
+		})
 		return (
-			<div>
-				<p>{this.state.logs}</p>
+			<div className="logs-dash">
+				<ul>
+					{logs}
+				</ul>
 			</div>
 		)
 	}
