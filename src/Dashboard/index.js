@@ -22,10 +22,16 @@ class Dashboard extends React.Component {
 				date: '',
 				thumbnail: ''
 			},
+			editLog: {
+				content: '',
+				date: '',
+				thumbnail: ''
+			}
 			dashClassName: 'logs-dash',
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
+			editLogClassName: 'display-none',
 			rating: ''
 		}
 	}
@@ -109,6 +115,60 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	showEditLogForm = (log, e) => {
+		e.preventDefault()
+		this.setState({
+			editLogClassName: "logs-edit",
+			accountProfileClassName: "display-none",
+			editLog: {
+				id: log.id,
+				author: log.author,
+				date: log.date,
+				thumbnail: log.thumbnail,
+				content: log.content
+			}
+		})
+	}
+	updateLog = async (e) => {
+		e.preventDefault();
+		try {
+			const updateLog = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/logs/update_log/' + this.state.editLog.id, {
+					method: 'PUT',
+					credentials: 'include',
+					body: JSON.stringify(this.state.editLog),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
+			if (!updateLog.ok) {
+				throw Error(updateLog.statusText)
+			}
+			const response = await updateLog.json();
+			const updatedLogs = this.state.logs.map((log) => {
+				if (log.id === this.state.editLog.id) {
+					log = response.data
+				}
+				return log
+			})
+			this.setState({
+				logs: updatedLogs,
+				editLog: {
+					id: '',
+					author: '',
+					date: '',
+					thumbnail: '',
+					content: ''
+				},
+				editLogClassName: 'display-none',
+				accountProfileClassName: 'account-profile'
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	showAccountSettings = async () => {
 		try {
 			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
@@ -172,8 +232,9 @@ class Dashboard extends React.Component {
 	// stopped by cors, or perhaps the body isn't translating?
 	rateUp = async (id, e) => {
 		e.preventDefault()
+		const body = 1
 		this.setState({
-			rating: 'up'
+			rating: body
 		})
 		console.log(this.state)
 		try {
@@ -203,8 +264,9 @@ class Dashboard extends React.Component {
 	// ""
 	rateDown = async (id, e) => {
 		e.preventDefault()
+		const body = 2
 		this.setState({
-			rating: 'down'
+			rating: body
 		})
 		console.log(this.state)
 		try {
@@ -255,6 +317,9 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 					<button onClick={this.showAccountSettings}>click this to show account settings</button>
+				</div>
+				<div className={this.state.accountProfileClassName}>
+					<Profile />
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}
