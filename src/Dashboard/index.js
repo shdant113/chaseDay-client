@@ -4,6 +4,7 @@ import './index.css';
 import Settings from '../Settings';
 import LogForm from '../LogForm';
 import Profile from '../Profile';
+import Header from '../Header';
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -47,6 +48,12 @@ class Dashboard extends React.Component {
 		}
 	}
 	componentDidMount = async () => {
+		this.getDash()
+	}
+	handleLogout = () => {
+		this.props.handleLogout()
+	}
+	getDash = async () => {
 		try {
 			const logs = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
 				'/api/v1/chaseDay/logs/dashboard', {
@@ -62,6 +69,7 @@ class Dashboard extends React.Component {
 				logs: logsResponse.data
 			})
 			this.getUser()
+			this.displayDash()
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -86,6 +94,15 @@ class Dashboard extends React.Component {
 			console.log(err)
 			return(err)
 		}
+	}
+	displayDash = () => {
+		this.setState({
+			dashClassName: 'logs-dash',
+			accountSettingsClassName: 'display-none',
+			accountProfileClassName: 'display-none',
+			newLogClassName: 'display-none',
+			editLogClassName: 'display-none'
+		})
 	}
 	setSettingsClassDisplayNone = () => {
 		this.setState({
@@ -254,6 +271,7 @@ class Dashboard extends React.Component {
 			accountProfileClassName: "display-none",
 			dashClassName: "logs-dash"
 		})
+		this.getDash()
 		this.getUser()
 	}
 	// showProfileSettings = (e) => {
@@ -342,6 +360,8 @@ class Dashboard extends React.Component {
 				account: response.data
 			})
 			this.setSettingsClassDisplayNone();
+			this.getDash()
+			this.getUser()
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -429,7 +449,9 @@ class Dashboard extends React.Component {
 		return (
 			<div className="dash-wrap">
 				<div className="header">
-
+					<Header account={this.state.account}
+					getDash={this.getDash} logout={this.handleLogout}
+					showUserProfile={this.showUserProfile} />
 				</div>
 				<div className={this.state.dashClassName}>
 					<h1>this is your dashboard</h1>

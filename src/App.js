@@ -15,7 +15,17 @@ class App extends Component {
 			loggedIn: true
 		})
 	}
-	handeLogout = () => {
+	handleLogout = async () => {
+		const logout = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+			'/api/v1/chaseDay/auth/logout', {
+				method: 'GET',
+				credentials: 'include'
+			}
+		)
+		if (!logout.ok) {
+			throw Error(logout.statusText)
+		}
+		await logout.json()
 		this.setState({
 			loggedIn: false
 		})
