@@ -58,6 +58,17 @@ class Dashboard extends React.Component {
 				throw Error(logs.statusText)
 			}
 			const logsResponse = await logs.json();
+			this.setState({
+				logs: logsResponse.data
+			})
+			this.getUser()
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
+	getUser = async () => {
+		try {
 			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
 				'/api/v1/chaseDay/user', {
 					method: 'GET',
@@ -65,11 +76,10 @@ class Dashboard extends React.Component {
 				}
 			)
 			if (!account.ok) {
-				throw Error(logs.statusText)
+				throw Error(account.statusText)
 			}
 			const accountResponse = await account.json();
 			this.setState({
-				logs: logsResponse.data,
 				account: accountResponse.data
 			})
 		} catch (err) {
@@ -197,11 +207,11 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
-	showUserProfile = async (e) => {
+	showUserProfile = async (id, e) => {
 		e.preventDefault();
 		try {
 			const userProfile = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
-				'/api/v1/chaseDay/user/user_profile/' + this.state.account.id, {
+				'/api/v1/chaseDay/user/user_profile/' + id, {
 					method: 'GET',
 					credentials: 'include'
 				}
@@ -244,6 +254,7 @@ class Dashboard extends React.Component {
 			accountProfileClassName: "display-none",
 			dashClassName: "logs-dash"
 		})
+		this.getUser()
 	}
 	// showProfileSettings = (e) => {
 	// 	e.preventDefault()
@@ -411,18 +422,19 @@ class Dashboard extends React.Component {
 				{log.content} <br /><br />
 				<button onClick={this.rateUp.bind(null, log.id)}>Rate Up</button>
 				<button onClick={this.rateDown.bind(null, log.id)}>Rate Down</button>
+				<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.author}'s profile</button>
 				<br /><br />
 			</li>
 		})
 		return (
 			<div className="dash-wrap">
 				<div className="header">
-					
+
 				</div>
 				<div className={this.state.dashClassName}>
 					<h1>this is your dashboard</h1>
 					<button onClick={this.showNewLogForm}>Write a New Log</button>
-					<button onClick={this.showUserProfile}>Go to Profile</button>
+					<button onClick={this.showUserProfile.bind(null, this.state.account.id)}>Go to Profile</button>
 					<div className="logs">
 						<ul>
 							{logs}
