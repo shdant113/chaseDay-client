@@ -80,7 +80,7 @@ class Dashboard extends React.Component {
 	setSettingsClassDisplayNone = () => {
 		this.setState({
 			accountSettingsClassName: "display-none",
-			accountProfileClassName: "account-profile"
+			dashClassName: "logs-dash"
 		})
 	}
 	setNewLogClassDisplayNone = () => {
@@ -211,10 +211,10 @@ class Dashboard extends React.Component {
 			}
 			const response = await userProfile.json()
 			this.setState({
-				accountProfileClassName: "account-profile",
-				dashClassName: "display-none",
 				account: response.data.user,
-				userLogs: response.data.logs
+				userLogs: response.data.logs,
+				accountProfileClassName: "account-profile",
+				dashClassName: "display-none"
 			})
 		} catch (err) {
 			console.log(err)
@@ -225,6 +225,9 @@ class Dashboard extends React.Component {
 		e.preventDefault();
 		this.setState({
 			account: {
+				id: this.state.account.id,
+				firstName: this.state.account.firstName,
+				lastName: this.state.account.lastName,
 				username: '',
 				email: '',
 				location: '',
@@ -413,9 +416,13 @@ class Dashboard extends React.Component {
 		})
 		return (
 			<div className="dash-wrap">
+				<div className="header">
+					
+				</div>
 				<div className={this.state.dashClassName}>
 					<h1>this is your dashboard</h1>
 					<button onClick={this.showNewLogForm}>Write a New Log</button>
+					<button onClick={this.showUserProfile}>Go to Profile</button>
 					<div className="logs">
 						<ul>
 							{logs}
@@ -425,7 +432,9 @@ class Dashboard extends React.Component {
 				</div>
 				<div className={this.state.accountProfileClassName}>
 					<Profile account={this.state.account}
+					userLogs={this.state.userLogs}
 					closeProfile={this.closeProfile}
+					rateUp={this.rateUp} rateDown={this.rateDown}
 					/>
 				</div>
 				<div className={this.state.newLogClassName}>
