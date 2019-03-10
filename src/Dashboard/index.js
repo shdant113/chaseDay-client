@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.css';
 import './index.css';
 import Settings from '../Settings';
+import LogForm from '../LogForm';
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -19,7 +20,7 @@ class Dashboard extends React.Component {
 				content: '',
 				date: '',
 				thumbnail: ''
-			}
+			},
 			accountSettingsClassName: 'display-none',
 			dashClassName: 'logs-dash',
 			newLogClassName: 'display-none'
@@ -46,6 +47,12 @@ class Dashboard extends React.Component {
 			dashClassName: "logs-dash"
 		})
 	}
+	setNewLogClassDisplayNone = () => {
+		this.setState({
+			newLogClassName: "display-none",
+			dashClassName: "logs-dash"
+		})
+	}
 	handleChangeAccount = (e) => {
 		this.setState({
 			account: {
@@ -63,7 +70,7 @@ class Dashboard extends React.Component {
 		})
 	}
 	showNewLogForm = () => {
-		this.setSTate({
+		this.setState({
 			newLogClassName: "logs-new",
 			dashClassName: "display-none"
 		})
@@ -85,10 +92,9 @@ class Dashboard extends React.Component {
 		}
 		const response = await newLog.json();
 		this.setState({
-			logs: [this.state.saved, response.data.log],
-			newLogClassName: "display-none",
-			dashClassName: "logs-dash"
+			logs: [this.state.saved, response.data.log]
 		})
+		this.setNewLogClassDisplayNone();
 	}
 	showAccountSettings = async () => {
 		const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
@@ -145,6 +151,7 @@ class Dashboard extends React.Component {
 			return <li key={i}>
 				{log.author} <br />
 				{log.createdAt.toString()} <br />
+				{log.thumbnail} <br />
 				{log.content} <br /><br />
 			</li>
 		})
@@ -159,6 +166,13 @@ class Dashboard extends React.Component {
 						</ul>
 					</div>
 					<button onClick={this.showAccountSettings}>click this to show account settings</button>
+				</div>
+				<div className={this.state.newLogClassName}>
+					<LogForm newLog={this.state.newLog}
+					// needs security for file upload prior to launch
+					closeForm={this.setNewLogClassDisplayNone}
+					handleChange={this.handleChangeLog}
+					postNewLog={this.postNewLog}/>
 				</div>
 				<div className={this.state.accountSettingsClassName}>
 					<Settings account={this.state.account} 
