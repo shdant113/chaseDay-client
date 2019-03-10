@@ -3,7 +3,6 @@ import '../App.css';
 import './index.css';
 import Settings from '../Settings';
 import LogForm from '../LogForm';
-import Profile from '../Profile';
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -26,13 +25,14 @@ class Dashboard extends React.Component {
 				content: '',
 				date: '',
 				thumbnail: ''
-			}
+			},
 			dashClassName: 'logs-dash',
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
-			rating: ''
+			rating: '',
+			userLogs: []
 		}
 	}
 	componentDidMount = async () => {
@@ -46,9 +46,20 @@ class Dashboard extends React.Component {
 			if (!logs.ok) {
 				throw Error(logs.statusText)
 			}
-			const response = await logs.json();
+			const logsResponse = await logs.json();
+			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+				'/api/v1/chaseDay/user', {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!account.ok) {
+				throw Error(logs.statusText)
+			}
+			const accountResponse = await account.json();
 			this.setState({
-				logs: response.data
+				logs: logsResponse.data,
+				account: accountResponse.data
 			})
 		} catch (err) {
 			console.log(err)
@@ -64,6 +75,12 @@ class Dashboard extends React.Component {
 	setNewLogClassDisplayNone = () => {
 		this.setState({
 			newLogClassName: "display-none",
+			dashClassName: "logs-dash"
+		})
+	}
+	setProfileClassDisplayNone = () => {
+		this.setState({
+			accountProfileClassName: "display-none",
 			dashClassName: "logs-dash"
 		})
 	}
@@ -169,6 +186,29 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	showUserProfile = async (e) => {
+		e.preventDefault();
+		try {
+			const userProfile = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/user/user_profile/' + this.state.account.id, {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!userProfile.ok) {
+				throw Error(userProfile.statusText)
+			}
+			const response = await userProfile.json()
+			this.setState({
+				accountProfileClassName: "account-profile",
+				dashClassName: "display-none",
+				userLogs: response.data.logs
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	showAccountSettings = async () => {
 		try {
 			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
@@ -183,7 +223,6 @@ class Dashboard extends React.Component {
 			const response = await account.json();
 			this.setState({
 				account: {
-					_id: response.data.id,
 					username: response.data.username,
 					email: response.data.email,
 					firstName: response.data.firstName,
@@ -216,11 +255,8 @@ class Dashboard extends React.Component {
 			await updateAccount.json();
 			this.setState({
 				account: {
-					_id: null,
 					username: '',
-					email: '',
-					firstName: '',
-					lastName: ''
+					email: ''
 				}
 			})
 			this.setSettingsClassDisplayNone();
@@ -319,7 +355,7 @@ class Dashboard extends React.Component {
 					<button onClick={this.showAccountSettings}>click this to show account settings</button>
 				</div>
 				<div className={this.state.accountProfileClassName}>
-					<Profile />
+					
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}
