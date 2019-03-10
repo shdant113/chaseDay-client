@@ -3,6 +3,7 @@ import '../App.css';
 import './index.css';
 import Settings from '../Settings';
 import LogForm from '../LogForm';
+import Profile from '../Profile';
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -14,7 +15,16 @@ class Dashboard extends React.Component {
 				username: '',
 				email: '',
 				firstName: '',
-				lastName: ''
+				lastName: '',
+				location: '',
+				facebook: '',
+				twitter: '',
+				youtube: '',
+				signature: '',
+				bio: '',
+				createdAt: null,
+				profilePhoto: null,
+				coverPhoto: null
 			},
 			newLog: {
 				content: '',
@@ -31,6 +41,7 @@ class Dashboard extends React.Component {
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
+			profileSettingsClassName: 'display-none',
 			rating: '',
 			userLogs: []
 		}
@@ -124,7 +135,7 @@ class Dashboard extends React.Component {
 			}
 			const response = await newLog.json();
 			this.setState({
-				logs: [this.state.saved, response.data.log]
+				logs: [...this.state.logs, response.data.log]
 			})
 			this.setNewLogClassDisplayNone();
 		} catch (err) {
@@ -202,7 +213,69 @@ class Dashboard extends React.Component {
 			this.setState({
 				accountProfileClassName: "account-profile",
 				dashClassName: "display-none",
+				account: response.data.user,
 				userLogs: response.data.logs
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
+	closeProfile = (e) => {
+		e.preventDefault();
+		this.setState({
+			account: {
+				_id: null,
+				username: '',
+				email: '',
+				firstName: '',
+				lastName: '',
+				location: '',
+				facebook: '',
+				twitter: '',
+				youtube: '',
+				signature: '',
+				bio: '',
+				createdAt: null,
+				profilePhoto: null,
+				coverPhoto: null
+			},
+			userLogs: [],
+			accountProfileClassName: "display-none",
+			dashClassName: "logs-dash"
+		})
+	}
+	showProfileSettings = (e) => {
+		e.preventDefault()
+		this.setState({
+			accountProfileClassName: "display-none",
+			profileSettingsClassName: "profile-settings-form",
+			accountSettingsClassName: 'display-none',
+			newLogClassName: 'display-none',
+			editLogClassName: 'display-none'
+		})
+	}
+	updateProfileSettings = async (e) => {
+		e.preventDefault()
+		try {
+			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+				'/api/v1/chaseDay/user/update_profile_settings' + 
+				this.state.account.id, {
+					method: 'PUT',
+					credentials: 'include',
+					body: JSON.stringify(this.state.account),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
+			if (!account.ok) {
+				throw Error(account.statusText)
+			}
+			const response = await account.json();
+			this.setState({
+				accountProfileClassName: "account-profile",
+				profileSettingsClassName: "display-none"
 			})
 		} catch (err) {
 			console.log(err)
@@ -229,7 +302,8 @@ class Dashboard extends React.Component {
 					lastName: response.data.lastName
 				},
 				accountSettingsClassName: "account-settings",
-				dashClassName: "display-none"
+				dashClassName: "display-none",
+				accountProfileClassName: "display-none"
 			})
 		} catch (err) {
 			console.log(err)
@@ -332,6 +406,7 @@ class Dashboard extends React.Component {
 	render() {
 		console.log(this.state)
 		const logs = this.state.logs.map((log, i) => {
+			console.log(log)
 			return <li key={log.id}>
 				{log.author} <br />
 				{log.createdAt.toString()} <br />
@@ -355,7 +430,9 @@ class Dashboard extends React.Component {
 					<button onClick={this.showAccountSettings}>click this to show account settings</button>
 				</div>
 				<div className={this.state.accountProfileClassName}>
-					
+					<Profile account={this.state.account}
+					closeProfile={this.closeProfile}
+					/>
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}
