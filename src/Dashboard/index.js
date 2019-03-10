@@ -11,6 +11,8 @@ class Dashboard extends React.Component {
 		super();
 		this.state = {
 			logs: [],
+			userLogs: [],
+			messages: [],
 			account: {
 				_id: null,
 				username: '',
@@ -37,15 +39,16 @@ class Dashboard extends React.Component {
 				date: '',
 				thumbnail: ''
 			},
+			newMessage: {
+				content: ''
+			}
 			dashClassName: 'logs-dash',
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
 			// profileSettingsClassName: 'display-none',
-			rating: '',
-			userLogs: [],
-			messages: []
+			rating: ''
 		}
 	}
 	componentDidMount = async () => {
@@ -119,6 +122,33 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	sendMessage = async (id, e) => {
+		e.preventDefault()
+		try {
+			const newMessage = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/messages/new_message/' + id, {
+					method: 'POST',
+					credentials: 'include',
+					body: JSON.stringify(this.state.newMessage),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
+			if (!newMessage.ok) {
+				throw Error(newMessage.statusText)
+			}
+			await newMessage.json();
+			this.setState({
+				newMessage: {
+					content: ''
+				}
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	displayDash = () => {
 		this.setState({
 			dashClassName: 'logs-dash',
@@ -159,6 +189,13 @@ class Dashboard extends React.Component {
 			newLog: {
 				...this.state.newLog,
 				[e.target.name]: e.target.value
+			}
+		})
+	}
+	handleChangeMessage = (e) => {
+		this.setState({
+			newMessage: {
+				content: e.target.value
 			}
 		})
 	}
@@ -296,7 +333,6 @@ class Dashboard extends React.Component {
 			dashClassName: "logs-dash"
 		})
 		this.getDash()
-		this.getUser()
 	}
 	// showProfileSettings = (e) => {
 	// 	e.preventDefault()
@@ -383,9 +419,7 @@ class Dashboard extends React.Component {
 			this.setState({
 				account: response.data
 			})
-			this.setSettingsClassDisplayNone();
 			this.getDash()
-			this.getUser()
 		} catch (err) {
 			console.log(err)
 			return(err)
