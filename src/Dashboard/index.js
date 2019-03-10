@@ -77,12 +77,12 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
-	// setSettingsClassDisplayNone = () => {
-	// 	this.setState({
-	// 		accountSettingsClassName: "display-none",
-	// 		accountProfileClassName: "account-profile"
-	// 	})
-	// }
+	setSettingsClassDisplayNone = () => {
+		this.setState({
+			accountSettingsClassName: "display-none",
+			accountProfileClassName: "account-profile"
+		})
+	}
 	setNewLogClassDisplayNone = () => {
 		this.setState({
 			newLogClassName: "display-none",
@@ -323,11 +323,11 @@ class Dashboard extends React.Component {
 			if (!updateAccount.ok) {
 				throw Error(updateAccount.statusText)
 			}
-			await updateAccount.json();
+			const response = await updateAccount.json();
 			this.setState({
-				accountSettingsClassName: "display-none"
+				account: response.data
 			})
-			this.showUserProfile();
+			this.setSettingsClassDisplayNone();
 		} catch (err) {
 			console.log(err)
 			return(err)

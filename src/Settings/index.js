@@ -64,11 +64,11 @@ const Settings = (props) => {
 					</label>
 					<br />
 					<label>Bio: <br />
-						<input type='textarea' name='bio' 
+						<textarea name='bio' 
 						value={props.account.bio} 
 						placeholder='Write something about yourself!' 
 						onChange={props.handleChange}
-						rows="50" wrap="soft" />
+						rows="25" cols="50" wrap="soft"></textarea>
 					</label>
 					<br />
 					<label>Profile Photo: <br />
