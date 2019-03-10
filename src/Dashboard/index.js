@@ -44,7 +44,8 @@ class Dashboard extends React.Component {
 			editLogClassName: 'display-none',
 			// profileSettingsClassName: 'display-none',
 			rating: '',
-			userLogs: []
+			userLogs: [],
+			messages: []
 		}
 	}
 	componentDidMount = async () => {
@@ -89,6 +90,29 @@ class Dashboard extends React.Component {
 			const accountResponse = await account.json();
 			this.setState({
 				account: accountResponse.data
+			})
+			this.getMessages()
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
+	getMessages = async () => {
+		try {
+			// this route needs to be restructed in the back end prior to launch
+			// account for unread messages in models as well
+			const messages = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+				'/api/v1/chaseDay/messages/read_messages', {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!messages.ok) {
+				throw Error(messages.statusText)
+			}
+			const messagesResponse = await messages.json();
+			this.setState({
+				messages: [...this.state.messages, messagesResponse.data]
 			})
 		} catch (err) {
 			console.log(err)
