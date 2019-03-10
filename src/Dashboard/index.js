@@ -41,7 +41,7 @@ class Dashboard extends React.Component {
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
-			profileSettingsClassName: 'display-none',
+			// profileSettingsClassName: 'display-none',
 			rating: '',
 			userLogs: []
 		}
@@ -77,12 +77,12 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
-	setSettingsClassDisplayNone = () => {
-		this.setState({
-			accountSettingsClassName: "display-none",
-			dashClassName: "logs-dash"
-		})
-	}
+	// setSettingsClassDisplayNone = () => {
+	// 	this.setState({
+	// 		accountSettingsClassName: "display-none",
+	// 		accountProfileClassName: "account-profile"
+	// 	})
+	// }
 	setNewLogClassDisplayNone = () => {
 		this.setState({
 			newLogClassName: "display-none",
@@ -225,11 +225,8 @@ class Dashboard extends React.Component {
 		e.preventDefault();
 		this.setState({
 			account: {
-				_id: null,
 				username: '',
 				email: '',
-				firstName: '',
-				lastName: '',
 				location: '',
 				facebook: '',
 				twitter: '',
@@ -245,43 +242,43 @@ class Dashboard extends React.Component {
 			dashClassName: "logs-dash"
 		})
 	}
-	showProfileSettings = (e) => {
-		e.preventDefault()
-		this.setState({
-			accountProfileClassName: "display-none",
-			profileSettingsClassName: "profile-settings-form",
-			accountSettingsClassName: 'display-none',
-			newLogClassName: 'display-none',
-			editLogClassName: 'display-none'
-		})
-	}
-	updateProfileSettings = async (e) => {
-		e.preventDefault()
-		try {
-			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
-				'/api/v1/chaseDay/user/update_profile_settings' + 
-				this.state.account.id, {
-					method: 'PUT',
-					credentials: 'include',
-					body: JSON.stringify(this.state.account),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			)
-			if (!account.ok) {
-				throw Error(account.statusText)
-			}
-			const response = await account.json();
-			this.setState({
-				accountProfileClassName: "account-profile",
-				profileSettingsClassName: "display-none"
-			})
-		} catch (err) {
-			console.log(err)
-			return(err)
-		}
-	}
+	// showProfileSettings = (e) => {
+	// 	e.preventDefault()
+	// 	this.setState({
+	// 		accountProfileClassName: "display-none",
+	// 		profileSettingsClassName: "profile-settings-form",
+	// 		accountSettingsClassName: 'display-none',
+	// 		newLogClassName: 'display-none',
+	// 		editLogClassName: 'display-none'
+	// 	})
+	// }
+	// updateProfileSettings = async (e) => {
+	// 	e.preventDefault()
+	// 	try {
+	// 		const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+	// 			'/api/v1/chaseDay/user/update_profile_settings' + 
+	// 			this.state.account.id, {
+	// 				method: 'PUT',
+	// 				credentials: 'include',
+	// 				body: JSON.stringify(this.state.account),
+	// 				headers: {
+	// 					'Content-Type': 'application/json'
+	// 				}
+	// 			}
+	// 		)
+	// 		if (!account.ok) {
+	// 			throw Error(account.statusText)
+	// 		}
+	// 		const response = await account.json();
+	// 		this.setState({
+	// 			accountProfileClassName: "account-profile",
+	// 			profileSettingsClassName: "display-none"
+	// 		})
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 		return(err)
+	// 	}
+	// }
 	showAccountSettings = async () => {
 		try {
 			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
@@ -328,12 +325,9 @@ class Dashboard extends React.Component {
 			}
 			await updateAccount.json();
 			this.setState({
-				account: {
-					username: '',
-					email: ''
-				}
+				accountSettingsClassName: "display-none"
 			})
-			this.setSettingsClassDisplayNone();
+			this.showUserProfile();
 		} catch (err) {
 			console.log(err)
 			return(err)
