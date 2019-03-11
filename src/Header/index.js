@@ -10,6 +10,7 @@ const Header = (props) => {
 							<button onClick={props.getDash}>Home</button>
 							<button onClick={props.logout}>Log Out</button>
 							<button onClick={props.showUserProfile.bind(null, props.account.id)}>Your Profile</button>
+							<button onClick={props.showInbox.bind(null, props.account.id)}>Your Inbox</button>
 						</span>
 					</div>
 				</div>

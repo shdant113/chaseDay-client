@@ -15,7 +15,8 @@ class Dashboard extends React.Component {
 			userLogs: [],
 			messages: {
 				sent: [],
-				received: []
+				received: [],
+				inbox: []
 			},
 			account: {
 				_id: null,
@@ -126,6 +127,27 @@ class Dashboard extends React.Component {
 					sent: messagesResponse.data.sent,
 					received: messagesResponse.data.received
 				}
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
+	showInbox = async (id, e) => {
+		e.preventDefault()
+		try {
+			const inbox = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/messages/inbox/' + id, {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!inbox.ok) {
+				throw Error(inbox.statusText)
+			}
+			const response = await inbox.json();
+			this.setState({
+				inbox: response.data
 			})
 		} catch (err) {
 			console.log(err)
@@ -518,7 +540,8 @@ class Dashboard extends React.Component {
 				<div className="header">
 					<Header account={this.state.account}
 					getDash={this.getDash} logout={this.handleLogout}
-					showUserProfile={this.showUserProfile} />
+					showUserProfile={this.showUserProfile}
+					showInbox={this.showInbox} />
 				</div>
 				<div className={this.state.dashClassName}>
 					<h1>this is your dashboard</h1>
