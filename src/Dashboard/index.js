@@ -192,6 +192,41 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	removeMessageFromInbox = async (id, e) => {
+		e.preventDefault()
+		try {
+			const eraseMessage = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/messages/update_message_inactive/' + id, {
+					method: 'PUT',
+					credentials: 'include',
+					body: this.state.messages.id,
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
+			if (!eraseMessage.ok) {
+				throw Error(eraseMessage.statusText)
+			}
+			const eraseResponse = await eraseMessage.json();
+			const inbox = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/messages/inbox/' + this.state.account.id, {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!inbox.ok) {
+				throw Error(inbox.statusText)
+			}
+			const newInbox = await inbox.json();
+			this.setState({
+				messages: newInbox.data
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	displayDash = () => {
 		this.setState({
 			dashClassName: 'logs-dash',
@@ -563,7 +598,9 @@ class Dashboard extends React.Component {
 				</div>
 				<div className={this.state.inboxClassName}>
 					<Inbox messages={this.state.messages}
-					closeInbox={this.displayDash}/>
+					closeInbox={this.displayDash}
+					showMessageForm={this.showMessageForm}
+					removeMessage={this.removeMessageFromInbox}/>
 				</div>
 			</div>
 		)

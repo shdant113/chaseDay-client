@@ -6,8 +6,12 @@ const Inbox = (props) => {
 			Sent at {message.createdAt} by {message.author.username}
 			<br /><br />
 			{message.content}
-			<button>Reply to this message</button>
+			<br /><br />
+			<button onClick={props.showMessageForm.bind(
+				null, message.author.id)}>Reply to this message</button>
 			<br />
+			<button onClick={props.removeMessage.bind(
+				null, message.id)}>Delete this message</button>
 		</li>
 	})
 	return (
