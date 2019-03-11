@@ -6,6 +6,7 @@ import LogForm from '../LogForm';
 import Profile from '../Profile';
 import Header from '../Header';
 import MessageForm from '../MessageForm';
+import Inbox from '../Inbox';
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -13,11 +14,7 @@ class Dashboard extends React.Component {
 		this.state = {
 			logs: [],
 			userLogs: [],
-			messages: {
-				sent: [],
-				received: [],
-				inbox: []
-			},
+			messages: [],
 			account: {
 				_id: null,
 				username: '',
@@ -54,7 +51,7 @@ class Dashboard extends React.Component {
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
 			newMessageFormClassName: 'display-none',
-			// profileSettingsClassName: 'display-none',
+			inboxClassName: 'display-none',
 			rating: ''
 		}
 	}
@@ -102,37 +99,37 @@ class Dashboard extends React.Component {
 			this.setState({
 				account: accountResponse.data
 			})
-			this.getMessages()
+			// this.getMessages()
 		} catch (err) {
 			console.log(err)
 			return(err)
 		}
 	}
-	getMessages = async () => {
-		try {
-			// this route needs to be restructed in the back end prior to launch
-			// account for unread messages in models as well
-			const messages = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
-				'/api/v1/chaseDay/messages/read_messages', {
-					method: 'GET',
-					credentials: 'include'
-				}
-			)
-			if (!messages.ok) {
-				throw Error(messages.statusText)
-			}
-			const messagesResponse = await messages.json();
-			this.setState({
-				messages: {
-					sent: messagesResponse.data.sent,
-					received: messagesResponse.data.received
-				}
-			})
-		} catch (err) {
-			console.log(err)
-			return(err)
-		}
-	}
+	// getMessages = async () => {
+	// 	try {
+	// 		// this route needs to be restructed in the back end prior to launch
+	// 		// account for unread messages in models as well
+	// 		const messages = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+	// 			'/api/v1/chaseDay/messages/read_messages', {
+	// 				method: 'GET',
+	// 				credentials: 'include'
+	// 			}
+	// 		)
+	// 		if (!messages.ok) {
+	// 			throw Error(messages.statusText)
+	// 		}
+	// 		const messagesResponse = await messages.json();
+	// 		this.setState({
+	// 			messages: {
+	// 				sent: messagesResponse.data.sent,
+	// 				received: messagesResponse.data.received
+	// 			}
+	// 		})
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 		return(err)
+	// 	}
+	// }
 	showInbox = async (id, e) => {
 		e.preventDefault()
 		try {
@@ -147,7 +144,9 @@ class Dashboard extends React.Component {
 			}
 			const response = await inbox.json();
 			this.setState({
-				inbox: response.data
+				messages: response.data,
+				inboxClassName: "inbox-wrap",
+				dashClassName: "display-none"
 			})
 		} catch (err) {
 			console.log(err)
@@ -200,27 +199,10 @@ class Dashboard extends React.Component {
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
-			newMessageFormClassName: 'display-none'
+			newMessageFormClassName: 'display-none',
+			inboxClassName: 'display-none'
 		})
 	}
-	// setSettingsClassDisplayNone = () => {
-	// 	this.setState({
-	// 		accountSettingsClassName: "display-none",
-	// 		dashClassName: "logs-dash"
-	// 	})
-	// }
-	// setNewLogClassDisplayNone = () => {
-	// 	this.setState({
-	// 		newLogClassName: "display-none",
-	// 		dashClassName: "logs-dash"
-	// 	})
-	// }
-	// setProfileClassDisplayNone = () => {
-	// 	this.setState({
-	// 		accountProfileClassName: "display-none",
-	// 		dashClassName: "logs-dash"
-	// 	})
-	// }
 	handleChangeAccount = (e) => {
 		this.setState({
 			account: {
@@ -578,6 +560,10 @@ class Dashboard extends React.Component {
 					closeForm={this.displayDash}
 					handleChange={this.handleChangeMessage}
 					sendMessage={this.sendMessage} />
+				</div>
+				<div className={this.state.inboxClassName}>
+					<Inbox messages={this.state.messages}
+					closeInbox={this.displayDash}/>
 				</div>
 			</div>
 		)
