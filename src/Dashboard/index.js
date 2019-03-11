@@ -16,7 +16,7 @@ class Dashboard extends React.Component {
 			userLogs: [],
 			messages: [],
 			account: {
-				_id: null,
+				_id: undefined,
 				username: '',
 				email: '',
 				firstName: '',
@@ -27,32 +27,43 @@ class Dashboard extends React.Component {
 				youtube: '',
 				signature: '',
 				bio: '',
-				createdAt: null,
-				profilePhoto: null,
-				coverPhoto: null
+				createdAt: undefined,
+				profilePhoto: '',
+				coverPhoto: ''
 			},
 			newLog: {
 				content: '',
-				date: '',
-				thumbnail: ''
+				date: ''
 			},
 			editLog: {
 				content: '',
-				date: '',
-				thumbnail: ''
+				date: ''
+			},
+			viewingLog: {
+				content: '',
+				date: ''
 			},
 			newMessage: {
 				content: '',
-				recipient: null
+				recipient: undefined
 			},
+			// viewingMessage: {
+			// 	content: '',
+			// 	author: '',
+			// 	timestamp: ''
+			// }
 			dashClassName: 'logs-dash',
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
 			newMessageFormClassName: 'display-none',
-			inboxClassName: 'display-none',
-			rating: ''
+			// inboxClassName: 'display-none',
+			// inboxWrapClassName: 'display-none',
+			// readMessage: false,
+			logViewClassName: 'display-none',
+			// messageViewClassName: 'display-none'
+			// rating: ''
 		}
 	}
 	componentDidMount = async () => {
@@ -136,23 +147,55 @@ class Dashboard extends React.Component {
 			const inbox = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
 				'/api/v1/chaseDay/messages/inbox/' + id, {
 					method: 'GET',
-					credentials: 'include'
+					credentials: 'include',
+					// body: this.state.messages,
+					// headers: {
+					// 	'Content-Type': 'application/json'
+					// }
 				}
 			)
 			if (!inbox.ok) {
 				throw Error(inbox.statusText)
 			}
 			const response = await inbox.json();
+			console.log(response)
 			this.setState({
 				messages: response.data,
-				inboxClassName: "inbox-wrap",
-				dashClassName: "display-none"
+				dashClassName: "display-none",
+				inboxWrapClassName: "inbox"
 			})
 		} catch (err) {
 			console.log(err)
 			return(err)
 		}
 	}
+	// readMessage = (id, e) => {
+	// 	e.preventDefault()
+	// 	try {
+	// 		const message = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+	// 			'/api/v1/chaseDay/messages/message/' + id, {
+	// 				method: 'GET',
+	// 				credentials: 'include'
+	// 			}
+	// 		)
+	// 		if (!message.ok) {
+	// 			throw Error(message.statusText)
+	// 		}
+	// 		const response = await message.json();
+	// 		this.setState({
+	// 			viewingMessage: {
+	// 				content: response.data.content,
+	// 				author: response.data.author,
+	// 				timestamp: response.data.createdAt
+	// 			},
+	// 			inboxClassName: 'opaque',
+	// 			readMessage: true
+	// 		})
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 		return(err)
+	// 	}
+	// }
 	showMessageForm = (id, e) => {
 		e.preventDefault()
 		this.setState({
@@ -235,7 +278,8 @@ class Dashboard extends React.Component {
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
 			newMessageFormClassName: 'display-none',
-			inboxClassName: 'display-none'
+			inboxClassName: 'display-none',
+			inboxWrapClassName: 'display-none'
 		})
 	}
 	handleChangeAccount = (e) => {
@@ -476,17 +520,15 @@ class Dashboard extends React.Component {
 	// stopped by cors, or perhaps the body isn't translating?
 	rateUp = async (id, e) => {
 		e.preventDefault()
-		const body = 1
 		this.setState({
-			rating: body
+			rating: 'up'
 		})
-		console.log(this.state)
 		try {
 			const rating = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
 				'/api/v1/chaseDay/ratings/rate/' + id, {
 					method: 'POST',
 					credentials: 'include',
-					body: JSON.stringify(this.state.rating),
+					body: this.state.rating,
 					headers: {
 						'Content-Type': 'application/json'
 					}
@@ -508,9 +550,8 @@ class Dashboard extends React.Component {
 	// ""
 	rateDown = async (id, e) => {
 		e.preventDefault()
-		const body = 2
 		this.setState({
-			rating: body
+			rating: 'down'
 		})
 		console.log(this.state)
 		try {
@@ -518,7 +559,7 @@ class Dashboard extends React.Component {
 				'/api/v1/chaseDay/ratings/rate/' + id, {
 					method: 'POST',
 					credentials: 'include',
-					body: JSON.stringify(this.state.rating),
+					body: this.state.rating,
 					headers: {
 						'Content-Type': 'application/json'
 					}
@@ -539,18 +580,28 @@ class Dashboard extends React.Component {
 	}
 	render() {
 		console.log(this.state.account)
+		console.log(this.state.messages)
 		const logs = this.state.logs.map((log, i) => {
-			return <li key={log.id}>
-				{log.author} <br />
-				{log.createdAt.toString()} <br />
-				<img src={log.thumbnail} alt={log.author}/> <br />
-				{log.content} <br /><br />
-				<button onClick={this.rateUp.bind(null, log.id)}>Rate Up</button>
-				<button onClick={this.rateDown.bind(null, log.id)}>Rate Down</button>
-				<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.author}'s profile</button>
-				<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.author} a messaage</button>
-				<br /><br />
-			</li>
+			if (log.user_id !== this.state.account.id) {
+				return <li key={log.id}>
+					{log.author} <br />
+					{log.createdAt.toString()} <br />
+					<img src={log.thumbnail} alt={log.author}/> <br />
+					{log.content} <br /><br />
+					<button onClick={this.rateUp.bind(null, log.id)}>Rate Up</button>
+					<button onClick={this.rateDown.bind(null, log.id)}>Rate Down</button>
+					<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.author}'s profile</button>
+					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.author} a messaage</button>
+					<br /><br />
+				</li>
+			} else {
+				return <li key={log.id}>
+					{log.author} <br />
+					{log.createdAt.toString()} <br />
+					<img src={log.thumbnail} alt={log.author}/> <br />
+					{log.content} <br /><br />
+				</li>
+			}
 		})
 		return (
 			<div className="dash-wrap">
@@ -596,9 +647,12 @@ class Dashboard extends React.Component {
 					handleChange={this.handleChangeMessage}
 					sendMessage={this.sendMessage} />
 				</div>
-				<div className={this.state.inboxClassName}>
+				<div className={this.state.inboxWrapClassName}>
 					<Inbox messages={this.state.messages}
+					inboxClassNaame={this.state.inboxClassName}
+					readMessage={this.state.readMessage}
 					closeInbox={this.displayDash}
+					viewingMessage={this.state.viewingMessage}
 					showMessageForm={this.showMessageForm}
 					removeMessage={this.removeMessageFromInbox}/>
 				</div>

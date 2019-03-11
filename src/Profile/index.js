@@ -2,16 +2,25 @@ import React from 'react';
 
 const Profile = (props) => {
 	const logs = props.userLogs.map((log, i) => {
-		// console.log(log)
-		return <li key={log.id}>
-			{log.author} <br />
-			{log.createdAt.toString()} <br />
-			<img src={log.thumbnail} alt={log.author}/> <br />
-			{log.content} <br /><br />
-			<button onClick={props.rateUp.bind(null, log.id)}>Rate Up</button>
-			<button onClick={props.rateDown.bind(null, log.id)}>Rate Down</button>
-			<br /><br />
-		</li>
+		if (log.user_id !== props.account.id) {
+			return <li key={log.id}>
+				{log.author} <br />
+				{log.createdAt.toString()} <br />
+				<img src={log.thumbnail} alt={log.author}/> <br />
+				{log.content} <br /><br />
+				<button onClick={props.rateUp.bind(null, log.id)}>Rate Up</button>
+				<button onClick={props.rateDown.bind(null, log.id)}>Rate Down</button>
+				<button onClick={props.showMessageForm.bind(null, log.user_id)}>Send {log.author} a messaage</button>
+				<br /><br />
+			</li>
+		} else {
+			return <li key={log.id}>
+				{log.author} <br />
+				{log.createdAt.toString()} <br />
+				<img src={log.thumbnail} alt={log.author}/> <br />
+				{log.content} <br /><br />
+			</li>
+		}
 	})
 	return (
 		<div className="profile-wrap">
