@@ -15,6 +15,7 @@ class Dashboard extends React.Component {
 			logs: [],
 			userLogs: [],
 			messages: [],
+			unread: undefined,
 			account: {
 				_id: undefined,
 				username: '',
@@ -110,48 +111,48 @@ class Dashboard extends React.Component {
 			this.setState({
 				account: accountResponse.data
 			})
-			// this.getMessages()
+			this.getMessages()
 		} catch (err) {
 			console.log(err)
 			return(err)
 		}
 	}
-	// getMessages = async () => {
-	// 	try {
-	// 		// this route needs to be restructed in the back end prior to launch
-	// 		// account for unread messages in models as well
-	// 		const messages = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
-	// 			'/api/v1/chaseDay/messages/read_messages', {
-	// 				method: 'GET',
-	// 				credentials: 'include'
-	// 			}
-	// 		)
-	// 		if (!messages.ok) {
-	// 			throw Error(messages.statusText)
-	// 		}
-	// 		const messagesResponse = await messages.json();
-	// 		this.setState({
-	// 			messages: {
-	// 				sent: messagesResponse.data.sent,
-	// 				received: messagesResponse.data.received
-	// 			}
-	// 		})
-	// 	} catch (err) {
-	// 		console.log(err)
-	// 		return(err)
-	// 	}
-	// }
+	getMessages = async () => {
+		try {
+			const messages = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
+				'/api/v1/chaseDay/messages', {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!messages.ok) {
+				throw Error(messages.statusText)
+			}
+			const messagesResponse = await messages.json();
+			console.log(messagesResponse.data)
+			const checkUnread = messagesResponse.data.some(message => message.unread == true);
+			console.log(checkUnread)
+			if (checkUnread === true) {
+				this.setState({
+					unread: true
+				})
+			} else {
+				this.setState({
+					unread: false
+				})
+			}
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	showInbox = async (id, e) => {
 		e.preventDefault()
 		try {
 			const inbox = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
 				'/api/v1/chaseDay/messages/inbox/' + id, {
 					method: 'GET',
-					credentials: 'include',
-					// body: this.state.messages,
-					// headers: {
-					// 	'Content-Type': 'application/json'
-					// }
+					credentials: 'include'
 				}
 			)
 			if (!inbox.ok) {
@@ -607,6 +608,7 @@ class Dashboard extends React.Component {
 			<div className="dash-wrap">
 				<div className="header">
 					<Header account={this.state.account}
+					unread={this.state.unread}
 					getDash={this.getDash} logout={this.handleLogout}
 					showUserProfile={this.showUserProfile}
 					showInbox={this.showInbox} />
