@@ -1,5 +1,5 @@
 import React from 'react';
-import Register from '../Register';
+import '../App.css';
 
 class Login extends React.Component {
 	constructor() {
@@ -7,11 +7,14 @@ class Login extends React.Component {
 		this.state = {
 			username: '',
 			password: '',
+			email: '',
+			firstName: '',
+			lastName: '',
 			showIncorrectCredentials: false,
 			showRegistrationPage: false,
 			registrationMessage: '',
-			loginClass: null,
-			registrationClass: null
+			loginClass: "login-form",
+			registrationClass: "display-none"
 		}
 	} 
 	handleChange = (e) => {
@@ -56,12 +59,16 @@ class Login extends React.Component {
 			return (err)
 		}
 	}
-	showRegistrationPage = () => {
+	showRegistrationPage = (e) => {
+		e.preventDefault()
 		this.setState({
-			showRegistrationPage: true
+			showRegistrationPage: true,
+			loginClass: "display-none",
+			registrationClass: "register-form"
 		})
 	}
-	handleRegistration = async (state) => {
+	handleRegistration = async (e) => {
+		e.preventDefault()
 		try {
 			const registrationResponse = await fetch(
 				process.env.REACT_APP_CLIENT_APP_URI + 
@@ -78,11 +85,15 @@ class Login extends React.Component {
 				throw Error(registrationResponse.statusText)
 			}
 			const response = await registrationResponse.json();
+			console.log(response.data.user)
 			if (response.data.user) {
 				this.setState({
-					username: state.username,
-					password: state.password,
-					showRegistrationPage: false
+					username: this.state.username,
+					firstName: this.state.firstName,
+					lastName: this.state.lastName,
+					showRegistrationPage: false,
+					loginClass: "login-form",
+					registrationClass: "display-none"
 				})
 				this.props.handleLogin()
 			} else {
@@ -101,7 +112,7 @@ class Login extends React.Component {
 				<div className="login-modal-header">
 					<h1>(put something here, make it look nice)</h1>
 				</div>
-				<div className="login-state-will-go-here">
+				<div className={this.state.loginClass}>
 					{this.state.showIncorrectCredentials ? 
 						<h3 className="login-screen-message">
 							Incorrect login credentials. Please enter your information again.
@@ -123,17 +134,53 @@ class Login extends React.Component {
 					</form>
 				</div>
 				<div className="register-state-will-go-here">
-					{ !this.state.showRegistration ? 
+					{ !this.state.showRegistrationPage ? 
 						<h2>Don't have an account? Click 
-						<button className="login-a" onClick={this.registrationOpen}>here</button>.
+						<button className="login-a" onClick={this.showRegistrationPage}>here</button>.
 						</h2> 
 						:
-						<h2>Register your account below.</h2> 
-					}
-					{ this.state.showRegistration ? 
-						<Register handleRegistration={this.handleRegistration} 
-						showRegistration={this.state.showRegistration} /> 
-						: null
+						<div className={this.state.registerClass}>
+							<h2>Register your account below.</h2>
+							<div className="register-container">
+								<form className="login-form" onSubmit={this.handleRegistration}>
+									<label>Username: <br />
+										<input type='text' name='username' 
+										value={this.state.username} 
+										placeholder='Username' 
+										onChange={this.handleChange} />
+									</label>
+									<br />
+									<label>Password: <br />
+										<input type='password' name='password' 
+										value={this.state.password}
+										onChange={this.handleChange} />
+									</label>
+									<br />
+									<label>Email: <br />
+										<input type='email' name='email' 
+										value={this.state.email} 
+										placeholder='Email' 
+										onChange={this.handleChange} />
+									</label>
+									<br />
+									<label>First Name: <br />
+										<input type='text' name='firstName' 
+										value={this.state.firstName} 
+										placeholder='First Name' 
+										onChange={this.handleChange} />
+									</label>
+									<br />
+									<label>Last Name: <br />
+										<input type='text' name='lastName' 
+										value={this.state.lastName} 
+										placeholder='Last Name' 
+										onChange={this.handleChange} />
+									</label>
+									<br />
+									<input type='submit' />
+								</form>
+							</div>
+						</div>
 					}
 				</div>
 			</div>

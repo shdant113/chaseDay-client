@@ -5,6 +5,7 @@ import Settings from '../Settings';
 import LogForm from '../LogForm';
 import Profile from '../Profile';
 import Header from '../Header';
+import MessageForm from '../MessageForm';
 
 class Dashboard extends React.Component {
 	constructor() {
@@ -12,7 +13,10 @@ class Dashboard extends React.Component {
 		this.state = {
 			logs: [],
 			userLogs: [],
-			messages: [],
+			messages: {
+				sent: [],
+				received: []
+			},
 			account: {
 				_id: null,
 				username: '',
@@ -40,13 +44,15 @@ class Dashboard extends React.Component {
 				thumbnail: ''
 			},
 			newMessage: {
-				content: ''
-			}
+				content: '',
+				recipient: null
+			},
 			dashClassName: 'logs-dash',
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
+			newMessageFormClassName: 'display-none',
 			// profileSettingsClassName: 'display-none',
 			rating: ''
 		}
@@ -91,6 +97,7 @@ class Dashboard extends React.Component {
 				throw Error(account.statusText)
 			}
 			const accountResponse = await account.json();
+			console.log(accountResponse)
 			this.setState({
 				account: accountResponse.data
 			})
@@ -115,18 +122,32 @@ class Dashboard extends React.Component {
 			}
 			const messagesResponse = await messages.json();
 			this.setState({
-				messages: [...this.state.messages, messagesResponse.data]
+				messages: {
+					sent: messagesResponse.data.sent,
+					received: messagesResponse.data.received
+				}
 			})
 		} catch (err) {
 			console.log(err)
 			return(err)
 		}
 	}
-	sendMessage = async (id, e) => {
+	showMessageForm = (id, e) => {
+		e.preventDefault()
+		this.setState({
+			dashClassName: "display-none",
+			newMessageFormClassName: "message-form",
+			newMessage: {
+				recipient: id
+			}
+		})
+	}
+	sendMessage = async (e) => {
 		e.preventDefault()
 		try {
 			const newMessage = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
-				'/api/v1/chaseDay/messages/new_message/' + id, {
+				'/api/v1/chaseDay/messages/new_message/' + 
+				this.state.newMessage.recipient, {
 					method: 'POST',
 					credentials: 'include',
 					body: JSON.stringify(this.state.newMessage),
@@ -144,6 +165,7 @@ class Dashboard extends React.Component {
 					content: ''
 				}
 			})
+			this.getDash()
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -155,27 +177,28 @@ class Dashboard extends React.Component {
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
-			editLogClassName: 'display-none'
+			editLogClassName: 'display-none',
+			newMessageFormClassName: 'display-none'
 		})
 	}
-	setSettingsClassDisplayNone = () => {
-		this.setState({
-			accountSettingsClassName: "display-none",
-			dashClassName: "logs-dash"
-		})
-	}
-	setNewLogClassDisplayNone = () => {
-		this.setState({
-			newLogClassName: "display-none",
-			dashClassName: "logs-dash"
-		})
-	}
-	setProfileClassDisplayNone = () => {
-		this.setState({
-			accountProfileClassName: "display-none",
-			dashClassName: "logs-dash"
-		})
-	}
+	// setSettingsClassDisplayNone = () => {
+	// 	this.setState({
+	// 		accountSettingsClassName: "display-none",
+	// 		dashClassName: "logs-dash"
+	// 	})
+	// }
+	// setNewLogClassDisplayNone = () => {
+	// 	this.setState({
+	// 		newLogClassName: "display-none",
+	// 		dashClassName: "logs-dash"
+	// 	})
+	// }
+	// setProfileClassDisplayNone = () => {
+	// 	this.setState({
+	// 		accountProfileClassName: "display-none",
+	// 		dashClassName: "logs-dash"
+	// 	})
+	// }
 	handleChangeAccount = (e) => {
 		this.setState({
 			account: {
@@ -195,6 +218,7 @@ class Dashboard extends React.Component {
 	handleChangeMessage = (e) => {
 		this.setState({
 			newMessage: {
+				...this.state.newMessage,
 				content: e.target.value
 			}
 		})
@@ -225,7 +249,7 @@ class Dashboard extends React.Component {
 			this.setState({
 				logs: [...this.state.logs, response.data.log]
 			})
-			this.setNewLogClassDisplayNone();
+			this.displayDash();
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -312,22 +336,6 @@ class Dashboard extends React.Component {
 	closeProfile = (e) => {
 		e.preventDefault();
 		this.setState({
-			account: {
-				id: this.state.account.id,
-				firstName: this.state.account.firstName,
-				lastName: this.state.account.lastName,
-				username: '',
-				email: '',
-				location: '',
-				facebook: '',
-				twitter: '',
-				youtube: '',
-				signature: '',
-				bio: '',
-				createdAt: null,
-				profilePhoto: null,
-				coverPhoto: null
-			},
 			userLogs: [],
 			accountProfileClassName: "display-none",
 			dashClassName: "logs-dash"
@@ -416,6 +424,7 @@ class Dashboard extends React.Component {
 				throw Error(updateAccount.statusText)
 			}
 			const response = await updateAccount.json();
+			console.log(response)
 			this.setState({
 				account: response.data
 			})
@@ -490,9 +499,8 @@ class Dashboard extends React.Component {
 		}
 	}
 	render() {
-		console.log(this.state)
+		console.log(this.state.account)
 		const logs = this.state.logs.map((log, i) => {
-			console.log(log)
 			return <li key={log.id}>
 				{log.author} <br />
 				{log.createdAt.toString()} <br />
@@ -501,6 +509,7 @@ class Dashboard extends React.Component {
 				<button onClick={this.rateUp.bind(null, log.id)}>Rate Up</button>
 				<button onClick={this.rateDown.bind(null, log.id)}>Rate Down</button>
 				<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.author}'s profile</button>
+				<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.author} a messaage</button>
 				<br /><br />
 			</li>
 		})
@@ -526,21 +535,26 @@ class Dashboard extends React.Component {
 					<Profile account={this.state.account}
 					userLogs={this.state.userLogs}
 					closeProfile={this.closeProfile}
-					rateUp={this.rateUp} rateDown={this.rateDown}
-					/>
+					rateUp={this.rateUp} rateDown={this.rateDown} />
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}
 					// needs security for file upload prior to launch
-					closeForm={this.setNewLogClassDisplayNone}
+					closeForm={this.displayDash}
 					handleChange={this.handleChangeLog}
-					postNewLog={this.postNewLog}/>
+					postNewLog={this.postNewLog} />
 				</div>
 				<div className={this.state.accountSettingsClassName}>
 					<Settings account={this.state.account} 
-					closeSettings={this.setSettingsClassDisplayNone} 
+					closeSettings={this.displayDash} 
 					handleChange={this.handleChangeAccount}
-					updateAccount={this.updateAccount}/>
+					updateAccount={this.updateAccount} />
+				</div>
+				<div className={this.state.newMessageFormClassName}>
+					<MessageForm newMessage={this.state.newMessage}
+					closeForm={this.displayDash}
+					handleChange={this.handleChangeMessage}
+					sendMessage={this.sendMessage} />
 				</div>
 			</div>
 		)
