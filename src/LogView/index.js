@@ -25,6 +25,7 @@ const LogView = (props) => {
 					{props.log.title} <br />
 					{props.log.createdAt.toString()} <br /><br />
 					{props.log.content} <br /><br />
+					<button onClick={props.editLog.bind(null, props.log)}>Edit Log</button>
 				</div>
 			)
 		}

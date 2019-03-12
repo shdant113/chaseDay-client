@@ -4,6 +4,7 @@ import './index.css';
 import Settings from '../Settings';
 import LogForm from '../LogForm';
 import LogView from '../LogView';
+import EditLog from '../EditLog';
 import Profile from '../Profile';
 import Header from '../Header';
 import MessageForm from '../MessageForm';
@@ -40,8 +41,10 @@ class Dashboard extends React.Component {
 				title: ''
 			},
 			editLog: {
+				id: undefined,
 				content: '',
-				date: ''
+				date: '',
+				title: ''
 			},
 			openLogView: false,
 			viewingLog: '',
@@ -309,6 +312,14 @@ class Dashboard extends React.Component {
 			}
 		})
 	}
+	handleChangeEditLog = (e) => {
+		this.setState({
+			editLog: {
+				...this.state.editLog,
+				[e.target.name]: e.target.value
+			}
+		})
+	}
 	handleChangeMessage = (e) => {
 		this.setState({
 			newMessage: {
@@ -350,15 +361,15 @@ class Dashboard extends React.Component {
 		e.preventDefault()
 		this.setState({
 			editLogClassName: "logs-edit",
-			accountProfileClassName: "display-none",
+			openLogView: false,
 			editLog: {
 				id: log.id,
-				author: log.author,
 				date: log.date,
 				title: log.title,
 				content: log.content
 			}
 		})
+		console.log(this.state.editLog)
 	}
 	updateLog = async (e) => {
 		e.preventDefault();
@@ -391,9 +402,7 @@ class Dashboard extends React.Component {
 					date: '',
 					title: '',
 					content: ''
-				},
-				editLogClassName: 'display-none',
-				accountProfileClassName: 'account-profile'
+				}
 			})
 			this.getDash()
 		} catch (err) {
@@ -687,10 +696,15 @@ class Dashboard extends React.Component {
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}
-					// needs security for file upload prior to launch
 					closeForm={this.displayDash}
 					handleChange={this.handleChangeLog}
 					postNewLog={this.postNewLog} />
+				</div>
+				<div className={this.state.editLogClassName}>
+					<EditLog editLog={this.state.editLog}
+					closeForm={this.displayDash}
+					handleChange={this.handleChangeEditLog}
+					updateLog={this.updateLog} />
 				</div>
 				<div className={this.state.accountSettingsClassName}>
 					<Settings account={this.state.account} 
@@ -706,7 +720,7 @@ class Dashboard extends React.Component {
 				</div>
 				<div className={this.state.inboxWrapClassName}>
 					<Inbox messages={this.state.messages}
-					inboxClassNaame={this.state.inboxClassName}
+					inboxClassName={this.state.inboxClassName}
 					readMessage={this.state.readMessage}
 					closeInbox={this.displayDash}
 					viewingMessage={this.state.viewingMessage}
@@ -717,6 +731,7 @@ class Dashboard extends React.Component {
 					<div className="log-view">
 						<LogView log={this.state.viewingLog}
 						account={this.state.account}
+						editLog={this.showEditLogForm}
 						open={this.state.openLogView}
 						closeLog={this.closeLog} 
 						showUserProfile={this.showUserProfile}
