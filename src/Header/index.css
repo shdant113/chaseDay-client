@@ -27,7 +27,7 @@
 }
 
 .welcome-text, .unread {
-	font-weight: 800;
+	font-weight: 500;
 	margin: 10px;
 }
 
@@ -35,12 +35,19 @@
 	font-size: 30px;
 }
 
+.welcome-text > a {
+	color: black;
+}
+
+.welcome-text > a:hover {
+	font-weight: 900;
+}
+
 .unread, .nav-button {
 	font-size: 20px;
 }
 
 .nav-button {
-	vertical-align: text-top;
 	width: 30%;
 	padding: 10px;
 	margin: 10px;

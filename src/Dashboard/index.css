@@ -41,15 +41,16 @@
 	background-color: rgba(255, 255, 255, 0.2);
 	width: 100%;
 	text-align: left;
+	word-break: break-all;
+	overflow-y: scroll;
 	padding: 0 30px;
 	height: 200px;
-	overflow: scroll;
-	border: 1px solid #7427c7;
+	border: 1px solid black;
 }
 
 .author, .log-title, .log-content, .log-navigator, .a {
 	font-family: 'Marmelad', sans-serif;
-	color: #7427c7;
+	color: #900900;
 }
 
 .author {
@@ -70,4 +71,22 @@
 	margin: 0 auto;
 	display: flex;
 	align-items: center;
+}
+
+.toolbar {
+	margin: 0px auto 30px auto;
+}
+
+.toolbar > button {
+	font-family: 'Walter Turncoat', cursive;
+	font-size: 20px;
+	background-color: rgba(255, 255, 255, 0.3);
+	border: 1px solid black;
+	margin: 0 10px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+
+.toolbar > button:hover {
+	filter: blur(2px);
 }

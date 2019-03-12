@@ -708,13 +708,14 @@ class Dashboard extends React.Component {
 					showInbox={this.showInbox} />
 				</div>
 				<div className={this.state.dashClassName}>
-					<h1>this is your dashboard</h1>
-					<button onClick={this.showNewLogForm}>Write a New Log</button>
-					<button onClick={this.showUserProfile.bind(null, this.state.account.id)}>Go to Profile</button>
+					<div className="toolbar">
+						<button onClick={this.showNewLogForm}>Write a New Log</button>
+						<button onClick={this.showAccountSettings}>Change Your Account Settings</button>
+					</div>
 					<div className="logs">
 						{logs}
 					</div>
-					<button onClick={this.showAccountSettings}>click this to show account settings</button>
+					
 				</div>
 				<div className={this.state.accountProfileClassName}>
 					<Profile account={this.state.account}
