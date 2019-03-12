@@ -2,42 +2,41 @@ import React from 'react';
 import './index.css'
 
 const Header = (props) => {
-	if (props.unread) {
-		return (
-			<div>
-				<header className='header'>
-					<div className='header-wrap'>
-						<div className='nav'>
-							<span className="nav-bar">
-								<button onClick={props.getDash}>Home</button>
-								<button onClick={props.logout}>Log Out</button>
-								<button onClick={props.showUserProfile.bind(null, props.account.id)}>Your Profile</button>
-								<button className="unread" onClick={props.showInbox.bind(null, props.account.id)}>Your Inbox</button>
-							</span>
-						</div>
-					</div>
-				</header>
-			</div>
-		)
-	} else {
-		return (
-			<div>
-				<header className='header'>
-					<div className='header-wrap'>
-						<div className='nav'>
-							<span className="nav-bar">
-								<button onClick={props.getDash}>Home</button>
-								<button onClick={props.logout}>Log Out</button>
-								<button onClick={props.showUserProfile.bind(null, props.account.id)}>Your Profile</button>
-								<button onClick={props.showInbox.bind(null, props.account.id)}>Your Inbox</button>
-							</span>
-						</div>
-					</div>
-				</header>
-			</div>
-		)
+	const renderContent = () => {
+		if (props.unread) {
+			return (
+				<div>
+					<h7 className="unread" 
+					onClick={props.showInbox.bind(null, props.account.id)}>
+					You have unread messages.</h7>
+				</div>
+			)
+		}
 	}
-	
-}
+	return (
+		<div className='header-wrap'>
+			<header className='header'>
+				<div className='nav-wrap'>
+					<div className='nav'>
+						<button className="nav-button" onClick={props.getDash}>Home</button>
+						<button className="nav-button" onClick={props.logout}>Log Out</button>
+						<button className="nav-button" onClick={props.showInbox.bind(null, props.account.id)}>Your Inbox</button>
+					</div>
+					<div>
+						<div className='welcome'>
+							<h5 className='welcome-text'>Welcome, <a href='' onClick={props.showUserProfile.bind(null, props.account.id)}>
+							 {props.account.firstName} {props.account.lastName}</a>.</h5>
+						</div>
+						{ renderContent() }
+					</div>
+				</div>
+				<span className='head'>
+					<div className='head-title1'>Chase</div>
+					<div className='head-title2'>Day</div>
+				</span>
+			</header>
+		</div>
+	)
+} 
 
 export default Header

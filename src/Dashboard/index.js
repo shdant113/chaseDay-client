@@ -554,12 +554,6 @@ class Dashboard extends React.Component {
 			}
 			const response = await account.json();
 			this.setState({
-				account: {
-					username: response.data.username,
-					email: response.data.email,
-					firstName: response.data.firstName,
-					lastName: response.data.lastName
-				},
 				openLogView: false,
 				accountSettingsClassName: "account-settings",
 				dashClassName: "display-none",

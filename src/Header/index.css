@@ -1,3 +1,90 @@
+.header {
+	display: block;
+	border-bottom: 1px solid black;
+	height: 70vh;
+}
+
+.header-wrap {
+	background-image: url('/images/chasedayheadbkg1.jpg');
+	background-size: cover;
+	min-height: 512px;
+}
+
+.nav-wrap {
+	margin: 0 auto;
+	opacity: 0.5;
+	border-bottom: 2px solid black;
+	background-color: rgba(255,255,255,1);
+}
+
+.nav-wrap, .nav {
+	display: flex;
+	justify-content: space-around;
+}
+
+.welcome, .nav-button, .unread {
+	font-family: 'Walter Turncoat', cursive;
+}
+
+.welcome-text, .unread {
+	font-weight: 800;
+	margin: 10px;
+}
+
+.welcome-text {
+	font-size: 30px;
+}
+
+.unread, .nav-button {
+	font-size: 20px;
+}
+
+.nav-button {
+	vertical-align: text-top;
+	width: 30%;
+	padding: 10px;
+	margin: 10px;
+	background-color: #0000003b;
+	border-radius: 50px;
+}
+
+.nav-button, .unread {
+	cursor: pointer;
+}
+
+.nav-button:hover, .unread:hover {
+	filter: blur(2px);
+}
+
 .unread {
-	background-color: red;
+	animation: blinker 1s linear infinite;
+	margin-top: 0px;
+}
+
+.head {
+	display: flex;
+	justify-content: center;
+	margin-top: 10px;
+}
+
+.head-title1, .head-title2 {
+	font-family: 'Megrim', cursive;
+	font-weight: 1000;
+	font-size: 70px;
+	text-shadow: 2px 2px 8px black;
+	margin: 0 0 10px 0;
+}
+
+.head-title1 {
+	color: #39e530;
+}
+
+.head-title2 {
+	color: #a35eed;
+}
+
+@keyframes blinker {
+	50% {
+		opacity: 0;
+	}
 }
