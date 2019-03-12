@@ -1,0 +1,73 @@
+.logs-dash {
+	margin: 10px;
+}
+
+.log-card {
+	background-color: rgba(255, 255, 255, 0.5);
+	margin: 10px auto;
+	height: 400px;
+	width: 600px;
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0 10px;
+	/*border: 2px solid #7427c7;*/
+	/*border-top: 10px solid blue;
+	box-shadow: inset -5px 5px lightblue;*/
+	/*border-bottom: 10px solid blue;*/
+	border-radius: 50px;
+}
+
+.log-top {
+	width: 100%;
+	height: 160px;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.profile-photo {
+	height: 140px;
+	width: 140px;
+	border-radius: 70px;
+	border: 1px solid black;
+	vertical-align: middle;
+}
+
+.log-title > h5, .log-title > h1, .log-title > h3 {
+	margin: 5px;
+}
+
+.log-content {
+	background-color: rgba(255, 255, 255, 0.2);
+	width: 100%;
+	text-align: left;
+	padding: 0 30px;
+	height: 200px;
+	overflow: scroll;
+	border: 1px solid #7427c7;
+}
+
+.author, .log-title, .log-content, .log-navigator, .a {
+	font-family: 'Marmelad', sans-serif;
+	color: #7427c7;
+}
+
+.author {
+	font-size: 30px;
+	font-weight: 500;
+	margin: 0;
+}
+
+.a {
+	text-decoration: none;
+}
+
+.a:hover {
+	font-weight: 1000;
+}
+
+.log-navigator {
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+}

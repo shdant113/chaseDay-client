@@ -19,7 +19,7 @@
 
 .nav-wrap, .nav {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 
 .welcome, .nav-button, .unread {

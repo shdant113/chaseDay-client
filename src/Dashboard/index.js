@@ -677,16 +677,22 @@ class Dashboard extends React.Component {
 		const logs = this.state.logs.map((log, i) => {
 			if (log.user_id !== this.state.account.id) {
 				return <div className="log-card" key={log.id}>
-					<img src={log.user.profilePhoto} alt={log.user.username} /><br />
-					<a href='' onClick={this.showUserProfile.bind(null, log.user_id)}>Written by {log.user.firstName} {log.user.lastName}</a> <br />
-					{log.title} <br />
-					{log.createdAt.toString()} <br /><br />
-					{log.content} <br /><br />
-					<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.user.firstName} {log.user.lastName}'s profile</button>
-					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.user.firstName} {log.user.lastName} a message</button>
-					<br />
-					<button onClick={this.readLog.bind(null, log.id)}>Expand</button>
-					<br /><br />
+					<div className="log-top">
+						<img className="profile-photo" src={log.user.profilePhoto}
+							alt={log.user.username} />
+						<div className="log-title">
+							<h5 className="author"><a className="a" href='' onClick={this.showUserProfile.bind(null, log.user_id)}>{log.user.firstName} {log.user.lastName}</a></h5>
+							<a className="a" onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.user.firstName} {log.user.lastName} a message</a>
+							<h1>{log.title}</h1>
+							<h3>{log.date}</h3>
+						</div>
+					</div>
+					<div className="log-content">
+						<p>{log.content}</p>
+					</div>
+					<div className="log-navigator">
+						<a className="a" onClick={this.readLog.bind(null, log.id)}>Expand</a>
+					</div>
 				</div>
 			} else {
 				return null

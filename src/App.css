@@ -38,16 +38,17 @@ a {
 
 body {
   max-width: 1000px;
+  min-height: 100vh;
   margin: 0 auto;
   border: 2px solid black;
+  padding-bottom: 10px;
+  background-color: #bebcbc;
 }
 
 html {
   background-color: #66616b;
-}
-
-body, html {
   height: 100%;
+  margin: 0;
 }
 
 @keyframes App-logo-spin {
