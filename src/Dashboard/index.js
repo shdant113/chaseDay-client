@@ -3,6 +3,7 @@ import '../App.css';
 import './index.css';
 import Settings from '../Settings';
 import LogForm from '../LogForm';
+import LogView from '../LogView';
 import Profile from '../Profile';
 import Header from '../Header';
 import MessageForm from '../MessageForm';
@@ -41,11 +42,8 @@ class Dashboard extends React.Component {
 				content: '',
 				date: ''
 			},
-			viewingLog: {
-				content: '',
-				date: '',
-				author: ''
-			},
+			openLogView: false,
+			viewingLog: '',
 			newMessage: {
 				content: '',
 				recipient: undefined
@@ -64,10 +62,9 @@ class Dashboard extends React.Component {
 			// inboxClassName: 'display-none',
 			// inboxWrapClassName: 'display-none',
 			// readMessage: false,
-			logViewClassName: 'display-none',
 			// messageViewClassName: 'display-none'
 			// rating: ''
-			logPhotos: []
+			// logPhotos: []
 		}
 	}
 	componentDidMount = async () => {
@@ -165,6 +162,7 @@ class Dashboard extends React.Component {
 			this.setState({
 				messages: response.data,
 				dashClassName: "display-none",
+				openLogView: false,
 				inboxWrapClassName: "inbox",
 				unread: false,
 				accountSettingsClassName: 'display-none',
@@ -284,6 +282,7 @@ class Dashboard extends React.Component {
 	displayDash = () => {
 		this.setState({
 			dashClassName: 'logs-dash',
+			openLogView: false,
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
@@ -418,11 +417,10 @@ class Dashboard extends React.Component {
 			const response = await getLog.json();
 			console.log(response)
 			this.setState({
-				viewingLog: {
-					content: response.data.content,
-					date: response.data.date,
-					author: response.data.author
-				}
+				viewingLog: response.data,
+				openLogView: true,
+				dashClassName: 'display-none',
+				accountProfileClassName: 'display-none'
 			})
 		} catch (err) {
 			console.log(err)
@@ -445,6 +443,7 @@ class Dashboard extends React.Component {
 			this.setState({
 				account: response.data.user,
 				userLogs: response.data.logs,
+				openLogView: false,
 				dashClassName: 'display-none',
 				accountSettingsClassName: 'display-none',
 				newLogClassName: 'display-none',
@@ -522,6 +521,7 @@ class Dashboard extends React.Component {
 					firstName: response.data.firstName,
 					lastName: response.data.lastName
 				},
+				openLogView: false,
 				accountSettingsClassName: "account-settings",
 				dashClassName: "display-none",
 				accountProfileClassName: "display-none"
@@ -648,8 +648,8 @@ class Dashboard extends React.Component {
 					<img src={log.user.profilePhoto} alt={log.user.username} /><br />
 					{log.createdAt.toString()} <br />
 					{log.content} <br /><br />
-					<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.author}'s profile</button>
-					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.author} a message</button>
+					<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.user.firstName} {log.user.lastName}'s profile</button>
+					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.user.firstName} {log.user.lastName} a message</button>
 					<br />
 					<button onClick={this.readLog.bind(null, log.id)}>Expand</button>
 					<br /><br />
@@ -716,6 +716,16 @@ class Dashboard extends React.Component {
 					showMessageForm={this.showMessageForm}
 					removeMessage={this.removeMessageFromInbox}/>
 				</div>
+				{ this.state.openLogView ? 
+					<div className="log-view">
+						<LogView log={this.state.viewingLog}
+						account={this.state.account}
+						open={this.state.openLogView}
+						closeLog={this.closeLog} 
+						showUserProfile={this.showUserProfile}
+						showMessageForm={this.showMessageForm} />
+					</div>
+				: null }
 			</div>
 		)
 	}
