@@ -39,12 +39,10 @@ class Login extends React.Component {
 					}
 				}
 			)
-			console.log('past the fetch call')
 			if (!loginResponse.ok) {
 				throw Error(loginResponse.statusText)
 			}
 			const response = await loginResponse.json();
-			console.log(response)
 			if (response.data.message === 'Login information correct') {
 				this.props.handleLogin();
 			} else {
@@ -85,7 +83,6 @@ class Login extends React.Component {
 				throw Error(registrationResponse.statusText)
 			}
 			const response = await registrationResponse.json();
-			console.log(response.data.user)
 			if (response.data.user) {
 				this.setState({
 					username: this.state.username,

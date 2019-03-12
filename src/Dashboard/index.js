@@ -43,7 +43,8 @@ class Dashboard extends React.Component {
 			},
 			viewingLog: {
 				content: '',
-				date: ''
+				date: '',
+				author: ''
 			},
 			newMessage: {
 				content: '',
@@ -88,6 +89,7 @@ class Dashboard extends React.Component {
 				throw Error(logs.statusText)
 			}
 			const logsResponse = await logs.json();
+			console.log(logsResponse)
 			this.setState({
 				logs: logsResponse.data
 			})
@@ -110,7 +112,6 @@ class Dashboard extends React.Component {
 				throw Error(account.statusText)
 			}
 			const accountResponse = await account.json();
-			console.log(accountResponse)
 			this.setState({
 				account: accountResponse.data
 			})
@@ -132,9 +133,7 @@ class Dashboard extends React.Component {
 				throw Error(messages.statusText)
 			}
 			const messagesResponse = await messages.json();
-			console.log(messagesResponse.data)
 			const checkUnread = messagesResponse.data.some(message => message.unread === true);
-			console.log(checkUnread)
 			if (checkUnread === true) {
 				this.setState({
 					unread: true
@@ -404,6 +403,32 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	readLog = async (id, e) => {
+		e.preventDefault();
+		try {
+			const getLog = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/logs/' + id, {
+					method: 'GET',
+					credentials: 'include'
+				}
+			)
+			if (!getLog.ok) {
+				throw Error(getLog.statusText)
+			}
+			const response = await getLog.json();
+			console.log(response)
+			this.setState({
+				viewingLog: {
+					content: response.data.content,
+					date: response.data.date,
+					author: response.data.author
+				}
+			})
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	showUserProfile = async (id, e) => {
 		e.preventDefault();
 		try {
@@ -534,66 +559,66 @@ class Dashboard extends React.Component {
 		}
 	}
 	// stopped by cors, or perhaps the body isn't translating?
-	rateUp = async (id, e) => {
-		e.preventDefault()
-		this.setState({
-			rating: 'up'
-		})
-		try {
-			const rating = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
-				'/api/v1/chaseDay/ratings/rate/' + id, {
-					method: 'POST',
-					credentials: 'include',
-					body: this.state.rating,
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			)
-			console.log('request sent')
-			if (!rating.ok) {
-				throw Error(rating.statusText)
-			}
-			await rating.json();
-			this.setState({
-				rating: ''
-			})
-		} catch (err) {
-			console.log(err)
-			return(err)
-		}
-	}
-	// ""
-	rateDown = async (id, e) => {
-		e.preventDefault()
-		this.setState({
-			rating: 'down'
-		})
-		console.log(this.state)
-		try {
-			const rating = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
-				'/api/v1/chaseDay/ratings/rate/' + id, {
-					method: 'POST',
-					credentials: 'include',
-					body: this.state.rating,
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			)
-			console.log('request sent')
-			if (!rating.ok) {
-				throw Error(rating.statusText)
-			}
-			await rating.json();
-			this.setState({
-				rating: ''
-			})
-		} catch (err) {
-			console.log(err)
-			return(err)
-		}
-	}
+	// rateUp = async (id, e) => {
+	// 	e.preventDefault()
+	// 	this.setState({
+	// 		rating: 'up'
+	// 	})
+	// 	try {
+	// 		const rating = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+	// 			'/api/v1/chaseDay/ratings/rate/' + id, {
+	// 				method: 'POST',
+	// 				credentials: 'include',
+	// 				body: this.state.rating,
+	// 				headers: {
+	// 					'Content-Type': 'application/json'
+	// 				}
+	// 			}
+	// 		)
+	// 		console.log('request sent')
+	// 		if (!rating.ok) {
+	// 			throw Error(rating.statusText)
+	// 		}
+	// 		await rating.json();
+	// 		this.setState({
+	// 			rating: ''
+	// 		})
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 		return(err)
+	// 	}
+	// }
+	// // ""
+	// rateDown = async (id, e) => {
+	// 	e.preventDefault()
+	// 	this.setState({
+	// 		rating: 'down'
+	// 	})
+	// 	console.log(this.state)
+	// 	try {
+	// 		const rating = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+	// 			'/api/v1/chaseDay/ratings/rate/' + id, {
+	// 				method: 'POST',
+	// 				credentials: 'include',
+	// 				body: this.state.rating,
+	// 				headers: {
+	// 					'Content-Type': 'application/json'
+	// 				}
+	// 			}
+	// 		)
+	// 		console.log('request sent')
+	// 		if (!rating.ok) {
+	// 			throw Error(rating.statusText)
+	// 		}
+	// 		await rating.json();
+	// 		this.setState({
+	// 			rating: ''
+	// 		})
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 		return(err)
+	// 	}
+	// }
 	onReady = (e) => {
 		e.target.pauseVideo();
 	}
@@ -616,28 +641,26 @@ class Dashboard extends React.Component {
 	// 	}
 	// }
 	render() {
-		console.log(this.state.account)
-		console.log(this.state.messages)
 		const logs = this.state.logs.map((log, i) => {
 			if (log.user_id !== this.state.account.id) {
-				return <li key={log.id}>
-					<a href='' onClick={this.showUserProfile.bind(null, log.user_id)}>{log.author}</a> <br />
+				return <div className="log-card" key={log.id}>
+					<a href='' onClick={this.showUserProfile.bind(null, log.user_id)}>Written by {log.user.firstName} {log.user.lastName}</a> <br />
+					<img src={log.user.profilePhoto} alt={log.user.username} /><br />
 					{log.createdAt.toString()} <br />
-					<img src={log.thumbnail} alt={log.author}/> <br />
 					{log.content} <br /><br />
-					<button onClick={this.rateUp.bind(null, log.id)}>Rate Up</button>
-					<button onClick={this.rateDown.bind(null, log.id)}>Rate Down</button>
 					<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.author}'s profile</button>
-					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.author} a messaage</button>
+					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.author} a message</button>
+					<br />
+					<button onClick={this.readLog.bind(null, log.id)}>Expand</button>
 					<br /><br />
-				</li>
+				</div>
 			} else {
-				return <li key={log.id}>
-					{log.author} <br />
+				return <div className="log-card" key={log.id}>
+					Written by {log.user.firstName} {log.user.lastName} <br />
+					<img src={log.user.profilePhoto} alt={log.user.username} /><br />
 					{log.createdAt.toString()} <br />
-					<img src={log.thumbnail} alt={log.author}/> <br />
 					{log.content} <br /><br />
-				</li>
+				</div>
 			}
 		})
 		return (
@@ -654,9 +677,7 @@ class Dashboard extends React.Component {
 					<button onClick={this.showNewLogForm}>Write a New Log</button>
 					<button onClick={this.showUserProfile.bind(null, this.state.account.id)}>Go to Profile</button>
 					<div className="logs">
-						<ul>
-							{logs}
-						</ul>
+						{logs}
 					</div>
 					<button onClick={this.showAccountSettings}>click this to show account settings</button>
 				</div>
