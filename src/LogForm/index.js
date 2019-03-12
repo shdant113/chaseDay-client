@@ -13,9 +13,9 @@ const LogForm = (props) => {
 						onChange={props.handleChange} />
 					</label>
 					<br />
-					<label>Thumbnail Image URL: <br />
-						<input type='text' name='thumbnail' 
-						value={props.newLog.thumbnail}
+					<label>Title: <br />
+						<input type='text' name='title' 
+						value={props.newLog.title}
 						onChange={props.handleChange} />
 					</label>
 					<br />
@@ -23,7 +23,7 @@ const LogForm = (props) => {
 						<textarea name='content' 
 						value={props.newLog.content} 
 						onChange={props.handleChange}
-						cols="50" rows="100" wrap="soft"></textarea>
+						rows="20" cols="50" wrap="soft"></textarea>
 					</label>
 					<br />
 					<input type='submit' />	

@@ -4,8 +4,9 @@ const Profile = (props) => {
 	const logs = props.userLogs.map((log, i) => {
 		if (log.user.id !== props.account.id) {
 			return <div key={log.id}>
-				Log written by {log.user.firstName} {log.user.lastName} <br />
 				<img src={log.user.profilePhoto} alt={log.user.username} /><br />
+				Log written by {log.user.firstName} {log.user.lastName} <br />
+				{log.title} <br />
 				{log.createdAt.toString()} <br />
 				{log.content} <br /><br />
 				<button onClick={props.readLog.bind(null, log.id)}>Expand</button>
@@ -15,10 +16,11 @@ const Profile = (props) => {
 			</div>
 		} else {
 			return <div key={log.id}>
-				Log written by {log.user.firstName} {log.user.lastName} <br />
 				<img src={log.user.profilePhoto} alt={log.user.username} /><br />
+				Log written by {log.user.firstName} {log.user.lastName} <br />
+				{log.title} <br />
 				{log.createdAt.toString()} <br />
-				{log.content} <br />
+				{log.content} <br /><br />
 				<button onClick={props.readLog.bind(null, log.id)}>Expand</button>
 				<br /> <br />
 			</div>
@@ -26,7 +28,7 @@ const Profile = (props) => {
 	})
 	return (
 		<div className="profile-wrap">
-			<h1>Your Profile</h1>
+			<h1>{props.account.firstName} {props.account.lastName}'s Profile</h1>
 			<button onClick={props.closeProfile}>Go back to dash!</button>
 			<div className="user-profile">
 				<div className="profile-photo">

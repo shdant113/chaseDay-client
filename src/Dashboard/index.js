@@ -36,7 +36,8 @@ class Dashboard extends React.Component {
 			},
 			newLog: {
 				content: '',
-				date: ''
+				date: '',
+				title: ''
 			},
 			editLog: {
 				content: '',
@@ -338,10 +339,7 @@ class Dashboard extends React.Component {
 			if (!newLog.ok) {
 				throw Error(newLog.statusText)
 			}
-			const response = await newLog.json();
-			// this.setState({
-			// 	logs: [...this.state.logs, response.data.log]
-			// })
+			await newLog.json();
 			this.getDash();
 		} catch (err) {
 			console.log(err)
@@ -357,7 +355,7 @@ class Dashboard extends React.Component {
 				id: log.id,
 				author: log.author,
 				date: log.date,
-				thumbnail: log.thumbnail,
+				title: log.title,
 				content: log.content
 			}
 		})
@@ -391,7 +389,7 @@ class Dashboard extends React.Component {
 					id: '',
 					author: '',
 					date: '',
-					thumbnail: '',
+					title: '',
 					content: ''
 				},
 				editLogClassName: 'display-none',
@@ -646,9 +644,10 @@ class Dashboard extends React.Component {
 		const logs = this.state.logs.map((log, i) => {
 			if (log.user_id !== this.state.account.id) {
 				return <div className="log-card" key={log.id}>
-					<a href='' onClick={this.showUserProfile.bind(null, log.user_id)}>Written by {log.user.firstName} {log.user.lastName}</a> <br />
 					<img src={log.user.profilePhoto} alt={log.user.username} /><br />
-					{log.createdAt.toString()} <br />
+					<a href='' onClick={this.showUserProfile.bind(null, log.user_id)}>Written by {log.user.firstName} {log.user.lastName}</a> <br />
+					{log.title} <br />
+					{log.createdAt.toString()} <br /><br />
 					{log.content} <br /><br />
 					<button onClick={this.showUserProfile.bind(null, log.user_id)}>Go to {log.user.firstName} {log.user.lastName}'s profile</button>
 					<button onClick={this.showMessageForm.bind(null, log.user_id)}>Send {log.user.firstName} {log.user.lastName} a message</button>
@@ -657,12 +656,7 @@ class Dashboard extends React.Component {
 					<br /><br />
 				</div>
 			} else {
-				return <div className="log-card" key={log.id}>
-					Written by {log.user.firstName} {log.user.lastName} <br />
-					<img src={log.user.profilePhoto} alt={log.user.username} /><br />
-					{log.createdAt.toString()} <br />
-					{log.content} <br /><br />
-				</div>
+				return null
 			}
 		})
 		return (

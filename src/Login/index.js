@@ -174,6 +174,13 @@ class Login extends React.Component {
 										onChange={this.handleChange} />
 									</label>
 									<br />
+									<label>Location: <br />
+										<input type='text' name='location' 
+										value={this.state.location} 
+										placeholder='Chicago, IL' 
+										onChange={this.handleChange} />
+									</label>
+									<br />
 									<input type='submit' />
 								</form>
 							</div>

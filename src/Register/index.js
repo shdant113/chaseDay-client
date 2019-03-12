@@ -8,7 +8,8 @@ class Register extends React.Component {
 			password: '',
 			email: '',
 			firstName: '',
-			lastName: ''
+			lastName: '',
+			location: ''
 		}
 	}
 	handleChange = (e) => {
@@ -56,6 +57,13 @@ class Register extends React.Component {
 							<input type='text' name='lastName' 
 							value={this.state.lastName} 
 							placeholder='Last Name' 
+							onChange={this.handleChange} />
+						</label>
+						<br />
+						<label>Location: <br />
+							<input type='text' name='location' 
+							value={this.state.location} 
+							placeholder='Chicago, IL' 
 							onChange={this.handleChange} />
 						</label>
 						<br />
