@@ -46,6 +46,7 @@ class Dashboard extends React.Component {
 				date: '',
 				title: ''
 			},
+			logToRemove: '',
 			openLogView: false,
 			viewingLog: '',
 			newMessage: {
@@ -410,6 +411,35 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	removeLog = async (id, e) => {
+		this.setState({
+			logToRemove: id
+		})
+		e.preventDefault()
+		try {
+			const removeLog = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+				'/api/v1/chaseDay/logs/log_remove/' + id, {
+					method: 'PUT',
+					credentials: 'include',
+					body: this.state.logToRemove,
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
+			if (!removeLog.ok) {
+				throw Error(removeLog.statusText)
+			}
+			await removeLog.json();
+			this.setState({
+				logToRemove: ''
+			})
+			this.getDash()
+		} catch (err) {
+			console.log(err)
+			return(err)
+		}
+	}
 	readLog = async (id, e) => {
 		e.preventDefault();
 		try {
@@ -702,6 +732,7 @@ class Dashboard extends React.Component {
 				</div>
 				<div className={this.state.editLogClassName}>
 					<EditLog editLog={this.state.editLog}
+					removeLog={this.removeLog}
 					closeForm={this.displayDash}
 					handleChange={this.handleChangeEditLog}
 					updateLog={this.updateLog} />

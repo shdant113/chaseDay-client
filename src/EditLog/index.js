@@ -5,6 +5,7 @@ const EditLog = (props) => {
 		<div className="log-form-wrap">
 			<h1>Editing Your Log</h1>
 			<button onClick={props.closeForm}>Go back to my dash!</button>
+			<button onClick={props.removeLog.bind(null, props.editLog.id)}>Erase Log</button>
 			<div>
 				<form className="log-form" onSubmit={props.updateLog}>
 					<label>Date: <br />
