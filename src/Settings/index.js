@@ -72,33 +72,24 @@ const Settings = (props) => {
 					</label>
 					<br />
 					<label>Profile Photo: <br />
-						<label className="upload-label"
-						style={{
-							background: "buttonface",
-							border: "1px solid rgb(216, 216, 216)",
-							padding: "1px 7px 2px",
-							cursor: "pointer",
-							font: "400 11px system-ui"
-						}}>Upload A File<br />
-						<input className="image-file" type='file' name='profilePhoto'
-						accept=".jpg,.jpeg,.png" style={{display: "none"}}
-						value={props.account.profilePhoto}
-						onChange={props.handleChange} /></label>
+						<input type='text' name='profilePhoto' 
+						value={props.account.profilePhoto} 
+						placeholder='https://www.imgur.com/you' 
+						onChange={props.handleChange} />
 					</label>
 					<br />
 					<label>Cover Photo: <br />
-						<label className="upload-label"
-						style={{
-							background: "buttonface",
-							border: "1px solid rgb(216, 216, 216)",
-							padding: "1px 7px 2px",
-							cursor: "pointer",
-							font: "400 11px system-ui"
-						}}>Upload A File<br />
-						<input className="image-file" type='file' name='coverPhoto'
-						accept=".jpg,.jpeg,.png" style={{display: "none"}}
-						value={props.account.coverPhoto}
-						onChange={props.handleChange} /></label>
+						<input type='text' name='coverPhoto' 
+						value={props.account.coverPhoto} 
+						placeholder='https://www.imgur.com/coverPhoto' 
+						onChange={props.handleChange} />
+					</label>
+					<br />
+					<label>Profile Video: <br />
+						<input type='text' name='profileVideo' 
+						value={props.account.profileVideo} 
+						placeholder='https://www.youtube.com/profileVid' 
+						onChange={props.handleChange} />
 					</label>
 					<br />
 					<input type='submit' />	

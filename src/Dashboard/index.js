@@ -30,7 +30,8 @@ class Dashboard extends React.Component {
 				bio: '',
 				createdAt: undefined,
 				profilePhoto: '',
-				coverPhoto: ''
+				coverPhoto: '',
+				profileVideo: ''
 			},
 			newLog: {
 				content: '',
@@ -65,10 +66,12 @@ class Dashboard extends React.Component {
 			logViewClassName: 'display-none',
 			// messageViewClassName: 'display-none'
 			// rating: ''
+			logPhotos: []
 		}
 	}
 	componentDidMount = async () => {
 		this.getDash()
+		// this.getLogAuthorPicture()
 	}
 	handleLogout = () => {
 		this.props.handleLogout()
@@ -130,7 +133,7 @@ class Dashboard extends React.Component {
 			}
 			const messagesResponse = await messages.json();
 			console.log(messagesResponse.data)
-			const checkUnread = messagesResponse.data.some(message => message.unread == true);
+			const checkUnread = messagesResponse.data.some(message => message.unread === true);
 			console.log(checkUnread)
 			if (checkUnread === true) {
 				this.setState({
@@ -163,7 +166,14 @@ class Dashboard extends React.Component {
 			this.setState({
 				messages: response.data,
 				dashClassName: "display-none",
-				inboxWrapClassName: "inbox"
+				inboxWrapClassName: "inbox",
+				unread: false,
+				accountSettingsClassName: 'display-none',
+				newLogClassName: 'display-none',
+				editLogClassName: 'display-none',
+				newMessageFormClassName: 'display-none',
+				inboxClassName: 'display-none',
+				accountProfileClassName: "display-none"
 			})
 		} catch (err) {
 			console.log(err)
@@ -202,6 +212,7 @@ class Dashboard extends React.Component {
 		this.setState({
 			dashClassName: "display-none",
 			newMessageFormClassName: "message-form",
+			inboxWrapClassName: "display-none",
 			newMessage: {
 				recipient: id
 			}
@@ -252,7 +263,7 @@ class Dashboard extends React.Component {
 			if (!eraseMessage.ok) {
 				throw Error(eraseMessage.statusText)
 			}
-			const eraseResponse = await eraseMessage.json();
+			await eraseMessage.json();
 			const inbox = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
 				'/api/v1/chaseDay/messages/inbox/' + this.state.account.id, {
 					method: 'GET',
@@ -409,8 +420,14 @@ class Dashboard extends React.Component {
 			this.setState({
 				account: response.data.user,
 				userLogs: response.data.logs,
-				accountProfileClassName: "account-profile",
-				dashClassName: "display-none"
+				dashClassName: 'display-none',
+				accountSettingsClassName: 'display-none',
+				newLogClassName: 'display-none',
+				editLogClassName: 'display-none',
+				newMessageFormClassName: 'display-none',
+				inboxClassName: 'display-none',
+				inboxWrapClassName: 'display-none',
+				accountProfileClassName: "account-profile"
 			})
 		} catch (err) {
 			console.log(err)
@@ -420,9 +437,7 @@ class Dashboard extends React.Component {
 	closeProfile = (e) => {
 		e.preventDefault();
 		this.setState({
-			userLogs: [],
-			accountProfileClassName: "display-none",
-			dashClassName: "logs-dash"
+			userLogs: []
 		})
 		this.getDash()
 	}
@@ -579,13 +594,34 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	onReady = (e) => {
+		e.target.pauseVideo();
+	}
+	// getLogAuthorPicture = async () => {
+	// 	try {
+	// 		const user = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
+	// 			'/api/v1/chaseDay/logs/log_users', {
+	// 				method: 'GET',
+	// 				credentials: 'include'
+	// 			}
+	// 		)
+	// 		if (!user.ok) {
+	// 			throw Error(user.statusText)
+	// 		}
+	// 		const response = await user.json();
+	// 		console.log(response)
+	// 	} catch (err) {
+	// 		console.log(err)
+	// 		return(err)
+	// 	}
+	// }
 	render() {
 		console.log(this.state.account)
 		console.log(this.state.messages)
 		const logs = this.state.logs.map((log, i) => {
 			if (log.user_id !== this.state.account.id) {
 				return <li key={log.id}>
-					{log.author} <br />
+					<a href='' onClick={this.showUserProfile.bind(null, log.user_id)}>{log.author}</a> <br />
 					{log.createdAt.toString()} <br />
 					<img src={log.thumbnail} alt={log.author}/> <br />
 					{log.content} <br /><br />
@@ -628,7 +664,8 @@ class Dashboard extends React.Component {
 					<Profile account={this.state.account}
 					userLogs={this.state.userLogs}
 					closeProfile={this.closeProfile}
-					rateUp={this.rateUp} rateDown={this.rateDown} />
+					rateUp={this.rateUp} rateDown={this.rateDown}
+					onReady={this.onReady} />
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}

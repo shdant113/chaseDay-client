@@ -13,19 +13,10 @@ const LogForm = (props) => {
 						onChange={props.handleChange} />
 					</label>
 					<br />
-					<label>Thumbnail: <br />
-						<label className="upload-label"
-						style={{
-							background: "buttonface",
-							border: "1px solid rgb(216, 216, 216)",
-							padding: "1px 7px 2px",
-							cursor: "pointer",
-							font: "400 11px system-ui"
-						}}>Upload A File<br />
-						<input className="image-file" type='file' name='thumbnail'
-						accept=".jpg,.jpeg,.png" style={{display: "none"}}
+					<label>Thumbnail Image URL: <br />
+						<input type='text' name='thumbnail' 
 						value={props.newLog.thumbnail}
-						onChange={props.handleChange} /></label>
+						onChange={props.handleChange} />
 					</label>
 					<br />
 					<label>Begin Your Log Below: <br />

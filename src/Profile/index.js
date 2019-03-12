@@ -27,6 +27,14 @@ const Profile = (props) => {
 			<h1>Your Profile</h1>
 			<button onClick={props.closeProfile}>Go back to dash!</button>
 			<div className="user-profile">
+				<div className="profile-photo">
+					<img src={props.account.profilePhoto} alt={props.account.username} />
+				</div>
+				<br />
+				<div className="cover-photo">
+					<img src={props.account.coverPhoto} alt={props.account.username} />
+				</div>
+				<br /><br />
 				<h3>{props.account.firstName} {props.account.lastName}</h3>
 				<h5>{props.account.username}</h5>
 				<ul>
@@ -36,6 +44,16 @@ const Profile = (props) => {
 				</ul>
 				<p>{props.account.firstName} {props.account.lastName} has 
 				been a member since {props.account.createdAt}.</p>
+				<br />
+				<div className="profile-video">
+					<iframe width="640" height="390" 
+					title="profile-video"
+					src={props.account.profileVideo} 
+					frameBorder="25" 
+					allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+					allowFullScreen />
+				</div>
+				<br />
 				<p>A little about {props.account.firstName} {props.account.lastName}:
 				<br /> 
 				{props.account.bio}</p>
