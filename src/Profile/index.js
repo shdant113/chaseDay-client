@@ -2,24 +2,26 @@ import React from 'react';
 
 const Profile = (props) => {
 	const logs = props.userLogs.map((log, i) => {
-		if (log.user_id !== props.account.id) {
-			return <li key={log.id}>
-				{log.author} <br />
+		if (log.user.id !== props.account.id) {
+			return <div key={log.id}>
+				Log written by {log.user.firstName} {log.user.lastName} <br />
+				<img src={log.user.profilePhoto} alt={log.user.username} /><br />
 				{log.createdAt.toString()} <br />
-				<img src={log.thumbnail} alt={log.author}/> <br />
 				{log.content} <br /><br />
-				<button onClick={props.rateUp.bind(null, log.id)}>Rate Up</button>
-				<button onClick={props.rateDown.bind(null, log.id)}>Rate Down</button>
-				<button onClick={props.showMessageForm.bind(null, log.user_id)}>Send {log.author} a messaage</button>
+				<button onClick={props.readLog.bind(null, log.id)}>Expand</button>
+				<button onClick={props.showMessageForm.bind(null, log.user_id)}>
+				Send {log.user.firstName} {log.user.lastName} a messaage</button>
 				<br /><br />
-			</li>
+			</div>
 		} else {
-			return <li key={log.id}>
-				{log.author} <br />
+			return <div key={log.id}>
+				Log written by {log.user.firstName} {log.user.lastName} <br />
+				<img src={log.user.profilePhoto} alt={log.user.username} /><br />
 				{log.createdAt.toString()} <br />
-				<img src={log.thumbnail} alt={log.author}/> <br />
-				{log.content} <br /><br />
-			</li>
+				{log.content} <br />
+				<button onClick={props.readLog.bind(null, log.id)}>Expand</button>
+				<br /> <br />
+			</div>
 		}
 	})
 	return (

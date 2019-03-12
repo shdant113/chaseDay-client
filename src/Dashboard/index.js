@@ -339,10 +339,10 @@ class Dashboard extends React.Component {
 				throw Error(newLog.statusText)
 			}
 			const response = await newLog.json();
-			this.setState({
-				logs: [...this.state.logs, response.data.log]
-			})
-			this.displayDash();
+			// this.setState({
+			// 	logs: [...this.state.logs, response.data.log]
+			// })
+			this.getDash();
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -379,14 +379,14 @@ class Dashboard extends React.Component {
 				throw Error(updateLog.statusText)
 			}
 			const response = await updateLog.json();
-			const updatedLogs = this.state.logs.map((log) => {
-				if (log.id === this.state.editLog.id) {
-					log = response.data
-				}
-				return log
-			})
+			// const updatedLogs = this.state.logs.map((log) => {
+			// 	if (log.id === this.state.editLog.id) {
+			// 		log = response.data
+			// 	}
+			// 	return log
+			// })
 			this.setState({
-				logs: updatedLogs,
+				// logs: updatedLogs,
 				editLog: {
 					id: '',
 					author: '',
@@ -397,6 +397,7 @@ class Dashboard extends React.Component {
 				editLogClassName: 'display-none',
 				accountProfileClassName: 'account-profile'
 			})
+			this.getDash()
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -439,7 +440,8 @@ class Dashboard extends React.Component {
 			if (!userProfile.ok) {
 				throw Error(userProfile.statusText)
 			}
-			const response = await userProfile.json()
+			const response = await userProfile.json();
+			console.log(response)
 			this.setState({
 				account: response.data.user,
 				userLogs: response.data.logs,
@@ -684,9 +686,10 @@ class Dashboard extends React.Component {
 				<div className={this.state.accountProfileClassName}>
 					<Profile account={this.state.account}
 					userLogs={this.state.userLogs}
+					showMessageForm={this.showMessageForm}
 					closeProfile={this.closeProfile}
 					rateUp={this.rateUp} rateDown={this.rateDown}
-					onReady={this.onReady} />
+					onReady={this.onReady} readLog={this.readLog} />
 				</div>
 				<div className={this.state.newLogClassName}>
 					<LogForm newLog={this.state.newLog}
