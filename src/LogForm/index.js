@@ -1,10 +1,11 @@
 import React from 'react';
+import '../App.css';
+import './index.css';
 
 const LogForm = (props) => {
 	return (
 		<div className="log-form-wrap">
-			<h1>Your New Log</h1>
-			<button onClick={props.closeForm}>Go back to my dash!</button>
+			<h1 className="new-log-h1">Add A New Log</h1>
 			<div>
 				<form className="log-form" onSubmit={props.postNewLog}>
 					<label>Date: <br />

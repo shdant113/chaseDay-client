@@ -554,6 +554,7 @@ class Dashboard extends React.Component {
 			}
 			const response = await account.json();
 			this.setState({
+				account: response.data,
 				openLogView: false,
 				accountSettingsClassName: "account-settings",
 				dashClassName: "display-none",
@@ -715,7 +716,6 @@ class Dashboard extends React.Component {
 					<div className="logs">
 						{logs}
 					</div>
-					
 				</div>
 				<div className={this.state.accountProfileClassName}>
 					<Profile account={this.state.account}

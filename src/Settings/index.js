@@ -3,8 +3,7 @@ import React from 'react';
 const Settings = (props) => {
 	return (
 		<div className="settings-wrap">
-			<h1>Your Account Settings</h1>
-			<button onClick={props.closeSettings}>Go back to my dash!</button>
+			<h1 className="settings-h1">Your Account Settings</h1>
 			<div>
 				<form className="settings-form" onSubmit={props.updateAccount}>
 					<label>Username: <br />

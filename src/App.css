@@ -46,9 +46,32 @@ body {
 }
 
 html {
-  background-color: #900900;
+  background-color: rgba(255, 255, 255);
   height: 100%;
   margin: 0;
+}
+
+button, input[type=submit] {
+  cursor: pointer;
+}
+
+input, label {
+  font-family: 'Marmelad', sans-serif;
+}
+
+input, textarea {
+  font-weight: 300;
+  font-size: 15px;
+  margin: 10px auto;
+}
+
+input {
+  border-radius: 5px;
+  min-width: 200px;
+}
+
+label {
+  padding-bottom: 10px;
 }
 
 @keyframes App-logo-spin {
