@@ -1,5 +1,7 @@
 import React from 'react';
 import '../App.css';
+import './index.css';
+import '../Header/index.css';
 
 class Login extends React.Component {
 	constructor() {
@@ -57,6 +59,14 @@ class Login extends React.Component {
 			return (err)
 		}
 	}
+	showLoginPage = (e) => {
+		e.preventDefault()
+		this.setState({
+			showRegistrationPage: false,
+			registrationClass: "display-none",
+			loginClass: "login-form"
+		})
+	}
 	showRegistrationPage = (e) => {
 		e.preventDefault()
 		this.setState({
@@ -107,17 +117,20 @@ class Login extends React.Component {
 		return (
 			<div className="login-modal">
 				<div className="login-modal-header">
-					<h1>(put something here, make it look nice)</h1>
+					<span className='head'>
+						<div className='head-title1'>Chase</div>
+						<div className='head-title2'>Day</div>
+					</span>
 				</div>
 				<div className={this.state.loginClass}>
 					{this.state.showIncorrectCredentials ? 
-						<h3 className="login-screen-message">
+						<h2 className="login-screen-message">
 							Incorrect login credentials. Please enter your information again.
-						</h3>
+						</h2>
 						:
-						<h3 className="login-screen-message">
+						<h2 className="login-screen-message">
 							Welcome! Log in below.
-						</h3>
+						</h2>
 					}
 					<form className="login-form" onSubmit={this.handleSubmit}>
 						<label>Username: <br />
@@ -130,14 +143,18 @@ class Login extends React.Component {
 						<input type="submit" />
 					</form>
 				</div>
-				<div className="register-state-will-go-here">
+				<div className="register-container">
 					{ !this.state.showRegistrationPage ? 
-						<h2>Don't have an account? Click 
-						<button className="login-a" onClick={this.showRegistrationPage}>here</button>.
+						<h2 className="login-screen-message">Don't have an account? Click <a 
+						href='' className="login-a" onClick={this.showRegistrationPage}>here</a>.
 						</h2> 
 						:
 						<div className={this.state.registerClass}>
-							<h2>Register your account below.</h2>
+							<h2 className="login-screen-message">
+								Register your account below, or click <a 
+									href='' className="login-a" 
+									onClick={this.showLoginPage}>here</a> to 
+									return to the login screen.</h2>
 							<div className="register-container">
 								<form className="login-form" onSubmit={this.handleRegistration}>
 									<label>Username: <br />
@@ -186,6 +203,16 @@ class Login extends React.Component {
 							</div>
 						</div>
 					}
+				</div>
+				<div className="footer">
+					<h5 className="login-screen-message">
+						ChaseDay is a site built by a storm chaser for storm chasers. 
+						ChaseDay is a place for chasers to log and discuss their chases, 
+						celebrate their achievements, and do so in a community of other chasers.<br /><br />
+						ChaseDay was built and designed by <a className="login-a" 
+						href='https://www.facebook.com/spencer.dant.9'>Spencer Dant</a>. 
+						ChaseDay is currently in development.
+					</h5>
 				</div>
 			</div>
 		)

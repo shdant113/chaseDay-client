@@ -1,0 +1,29 @@
+.login-modal-header {
+	background-image: url('/images/chasedayloginheadbkg.jpg');
+	background-size: cover;
+	height: 600px;
+	margin-top: -20px;
+}
+
+.head {
+	margin: 20px;
+}
+
+.login-screen-message {
+	font-family: 'Marmelad', sans-serif;
+	font-weight: 500;
+}
+
+.login-a, .login-a:active {
+	color: black;
+}
+
+.login-a:hover {
+	font-weight: 900;
+}
+
+.footer {
+	border-top: 1px solid black;
+	margin-top: 150px;
+	padding: 0 10px;
+}
