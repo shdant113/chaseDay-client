@@ -1,0 +1,25 @@
+.message-card, .message-top {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.message-card {
+	width: 600px;
+	margin: 50px auto;
+	padding: 10px;
+	background-color: rgba(255, 255, 255, 0.5);
+	border-radius: 50px;
+}
+
+.message-top {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+.inbox > h1 {
+	font-family: 'Marmelad', sans-serif;
+	color: #900900;
+	font-size: 50px;
+}

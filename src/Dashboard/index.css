@@ -37,7 +37,7 @@
 	margin: 5px;
 }
 
-.log-content {
+.content {
 	background-color: rgba(255, 255, 255, 0.2);
 	width: 100%;
 	text-align: left;
@@ -48,7 +48,7 @@
 	border: 1px solid black;
 }
 
-.author, .log-title, .log-content, .log-navigator, .a {
+.author, .log-title, .content, .log-navigator, .a {
 	font-family: 'Marmelad', sans-serif;
 	color: #900900;
 }

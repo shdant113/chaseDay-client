@@ -688,7 +688,7 @@ class Dashboard extends React.Component {
 							<h3>{log.date}</h3>
 						</div>
 					</div>
-					<div className="log-content">
+					<div className="content">
 						<p>{log.content}</p>
 					</div>
 					<div className="log-navigator">
@@ -753,6 +753,7 @@ class Dashboard extends React.Component {
 				<div className={this.state.inboxWrapClassName}>
 					<Inbox messages={this.state.messages}
 					inboxClassName={this.state.inboxClassName}
+					showUserProfile={this.showUserProfile}
 					readMessage={this.state.readMessage}
 					closeInbox={this.displayDash}
 					viewingMessage={this.state.viewingMessage}
