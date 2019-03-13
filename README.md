@@ -1,68 +1,21 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# ChaseDay
 
-## Available Scripts
+#### Designed and constructed by Spencer Dant.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+ChaseDay is currently under development. Current deployed site is temporary and will be taken down at the conclusion of development in preparation for the final launch, which will consist of numerous additional features, expansion of current functionality, a total redesign, and a scalable, mobile-friendly version. Registered users and posts will not persist into the final launch.
+\
+https://chaseday.herokuapp.com/
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+---
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+Storm chasing is a wild and unpredictable adventure that many people often pay thousands of dollars to have a slim chance of experiencing over a week-long period. Some people, on the other hand, become storm chasers. We forgo the paid tours, skip the fancy treatment, and learn how to make our time, money, and sacrifice pay off. We studied modeling, forecasting, navigating, and the process of converting what is often days of work, travel, and planning into a few successful minutes. Yet through all of our celebratory and not-so-celebratory dinners, long, tedious drives down the same highways, hours spent editing video after video, and total insanity as winter creeps in, lingers, and drives us all mad, there has never been one place where chasers of all the country and all the world can share with other chasers what we have accomplished.
 
-### `npm test`
+ChaseDay provides a platform where users can post logs of the good days, total busts, and everything in between in a social media format. Users can also read other logs on their dashboard, easily passing those up that they do not find interesting or opening the log in order to read it in its entirety. Users can also message one another easily about their experiences and customize their profile with a cover photo and a highlight video of their favorite experiences.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+ChaseDay is compiled with React, Express, and SQL. 
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Server-side repository: https://github.com/shdant113/ChaseDay
