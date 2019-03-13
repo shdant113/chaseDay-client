@@ -53,28 +53,19 @@ class Dashboard extends React.Component {
 				content: '',
 				recipient: undefined
 			},
-			// viewingMessage: {
-			// 	content: '',
-			// 	author: '',
-			// 	timestamp: ''
-			// }
 			dashClassName: 'logs-dash',
 			accountSettingsClassName: 'display-none',
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
 			newMessageFormClassName: 'display-none',
-			// inboxClassName: 'display-none',
-			// inboxWrapClassName: 'display-none',
-			// readMessage: false,
-			// messageViewClassName: 'display-none'
+			inboxWrapClassName: 'display-none',
 			// rating: ''
 			// logPhotos: []
 		}
 	}
 	componentDidMount = async () => {
 		this.getDash()
-		// this.getLogAuthorPicture()
 	}
 	handleLogout = () => {
 		this.props.handleLogout()
@@ -92,11 +83,12 @@ class Dashboard extends React.Component {
 			}
 			const logsResponse = await logs.json();
 			console.log(logsResponse)
+			this.allDisplayNone()
 			this.setState({
+				dashClassName: 'logs-dash',
 				logs: logsResponse.data
 			})
 			this.getUser()
-			this.displayDash()
 		} catch (err) {
 			console.log(err)
 			return(err)
@@ -150,6 +142,17 @@ class Dashboard extends React.Component {
 			return(err)
 		}
 	}
+	allDisplayNone = () => {
+		this.setState({
+			dashClassName: 'display-none',
+			openLogView: false,
+			accountSettingsClassName: 'display-none',
+			accountProfileClassName: 'display-none',
+			newLogClassName: 'display-none',
+			editLogClassName: 'display-none',
+			newMessageFormClassName: 'display-none'
+		})
+	}
 	showInbox = async (id, e) => {
 		e.preventDefault()
 		try {
@@ -163,58 +166,22 @@ class Dashboard extends React.Component {
 				throw Error(inbox.statusText)
 			}
 			const response = await inbox.json();
-			console.log(response)
+			this.allDisplayNone()
 			this.setState({
 				messages: response.data,
-				dashClassName: "display-none",
-				openLogView: false,
 				inboxWrapClassName: "inbox",
-				unread: false,
-				accountSettingsClassName: 'display-none',
-				newLogClassName: 'display-none',
-				editLogClassName: 'display-none',
-				newMessageFormClassName: 'display-none',
-				inboxClassName: 'display-none',
-				accountProfileClassName: "display-none"
+				unread: false
 			})
 		} catch (err) {
 			console.log(err)
 			return(err)
 		}
 	}
-	// readMessage = (id, e) => {
-	// 	e.preventDefault()
-	// 	try {
-	// 		const message = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
-	// 			'/api/v1/chaseDay/messages/message/' + id, {
-	// 				method: 'GET',
-	// 				credentials: 'include'
-	// 			}
-	// 		)
-	// 		if (!message.ok) {
-	// 			throw Error(message.statusText)
-	// 		}
-	// 		const response = await message.json();
-	// 		this.setState({
-	// 			viewingMessage: {
-	// 				content: response.data.content,
-	// 				author: response.data.author,
-	// 				timestamp: response.data.createdAt
-	// 			},
-	// 			inboxClassName: 'opaque',
-	// 			readMessage: true
-	// 		})
-	// 	} catch (err) {
-	// 		console.log(err)
-	// 		return(err)
-	// 	}
-	// }
 	showMessageForm = (id, e) => {
 		e.preventDefault()
+		this.allDisplayNone()
 		this.setState({
-			dashClassName: "display-none",
 			newMessageFormClassName: "message-form",
-			inboxWrapClassName: "display-none",
 			newMessage: {
 				recipient: id
 			}
@@ -283,19 +250,6 @@ class Dashboard extends React.Component {
 			console.log(err)
 			return(err)
 		}
-	}
-	displayDash = () => {
-		this.setState({
-			dashClassName: 'logs-dash',
-			openLogView: false,
-			accountSettingsClassName: 'display-none',
-			accountProfileClassName: 'display-none',
-			newLogClassName: 'display-none',
-			editLogClassName: 'display-none',
-			newMessageFormClassName: 'display-none',
-			inboxClassName: 'display-none',
-			inboxWrapClassName: 'display-none'
-		})
 	}
 	handleChangeAccount = (e) => {
 		this.setState({
@@ -370,7 +324,6 @@ class Dashboard extends React.Component {
 				content: log.content
 			}
 		})
-		console.log(this.state.editLog)
 	}
 	updateLog = async (e) => {
 		e.preventDefault();
@@ -389,14 +342,7 @@ class Dashboard extends React.Component {
 				throw Error(updateLog.statusText)
 			}
 			const response = await updateLog.json();
-			// const updatedLogs = this.state.logs.map((log) => {
-			// 	if (log.id === this.state.editLog.id) {
-			// 		log = response.data
-			// 	}
-			// 	return log
-			// })
 			this.setState({
-				// logs: updatedLogs,
 				editLog: {
 					id: '',
 					author: '',
@@ -453,7 +399,6 @@ class Dashboard extends React.Component {
 				throw Error(getLog.statusText)
 			}
 			const response = await getLog.json();
-			console.log(response)
 			this.setState({
 				viewingLog: response.data,
 				openLogView: true,
@@ -478,18 +423,10 @@ class Dashboard extends React.Component {
 				throw Error(userProfile.statusText)
 			}
 			const response = await userProfile.json();
-			console.log(response)
+			this.allDisplayNone()
 			this.setState({
 				account: response.data.user,
 				userLogs: response.data.logs,
-				openLogView: false,
-				dashClassName: 'display-none',
-				accountSettingsClassName: 'display-none',
-				newLogClassName: 'display-none',
-				editLogClassName: 'display-none',
-				newMessageFormClassName: 'display-none',
-				inboxClassName: 'display-none',
-				inboxWrapClassName: 'display-none',
 				accountProfileClassName: "account-profile"
 			})
 		} catch (err) {
@@ -504,43 +441,6 @@ class Dashboard extends React.Component {
 		})
 		this.getDash()
 	}
-	// showProfileSettings = (e) => {
-	// 	e.preventDefault()
-	// 	this.setState({
-	// 		accountProfileClassName: "display-none",
-	// 		profileSettingsClassName: "profile-settings-form",
-	// 		accountSettingsClassName: 'display-none',
-	// 		newLogClassName: 'display-none',
-	// 		editLogClassName: 'display-none'
-	// 	})
-	// }
-	// updateProfileSettings = async (e) => {
-	// 	e.preventDefault()
-	// 	try {
-	// 		const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
-	// 			'/api/v1/chaseDay/user/update_profile_settings' + 
-	// 			this.state.account.id, {
-	// 				method: 'PUT',
-	// 				credentials: 'include',
-	// 				body: JSON.stringify(this.state.account),
-	// 				headers: {
-	// 					'Content-Type': 'application/json'
-	// 				}
-	// 			}
-	// 		)
-	// 		if (!account.ok) {
-	// 			throw Error(account.statusText)
-	// 		}
-	// 		const response = await account.json();
-	// 		this.setState({
-	// 			accountProfileClassName: "account-profile",
-	// 			profileSettingsClassName: "display-none"
-	// 		})
-	// 	} catch (err) {
-	// 		console.log(err)
-	// 		return(err)
-	// 	}
-	// }
 	showAccountSettings = async () => {
 		try {
 			const account = await fetch(process.env.REACT_APP_CLIENT_APP_URI +
@@ -555,7 +455,6 @@ class Dashboard extends React.Component {
 			const response = await account.json();
 			this.setState({
 				account: response.data,
-				openLogView: false,
 				accountSettingsClassName: "account-settings",
 				dashClassName: "display-none",
 				accountProfileClassName: "display-none"
@@ -582,7 +481,6 @@ class Dashboard extends React.Component {
 				throw Error(updateAccount.statusText)
 			}
 			const response = await updateAccount.json();
-			console.log(response)
 			this.setState({
 				account: response.data
 			})
@@ -656,24 +554,6 @@ class Dashboard extends React.Component {
 	onReady = (e) => {
 		e.target.pauseVideo();
 	}
-	// getLogAuthorPicture = async () => {
-	// 	try {
-	// 		const user = await fetch(process.env.REACT_APP_CLIENT_APP_URI + 
-	// 			'/api/v1/chaseDay/logs/log_users', {
-	// 				method: 'GET',
-	// 				credentials: 'include'
-	// 			}
-	// 		)
-	// 		if (!user.ok) {
-	// 			throw Error(user.statusText)
-	// 		}
-	// 		const response = await user.json();
-	// 		console.log(response)
-	// 	} catch (err) {
-	// 		console.log(err)
-	// 		return(err)
-	// 	}
-	// }
 	render() {
 		const logs = this.state.logs.map((log, i) => {
 			if (log.user_id !== this.state.account.id) {

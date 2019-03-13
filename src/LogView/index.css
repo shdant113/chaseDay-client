@@ -1,0 +1,45 @@
+.log-viewer {
+	width: 800px;
+	padding: 10px;
+	background-color: rgba(255, 255, 255, 0.2);
+	margin: 10px auto;
+	border: 1px solid black;
+}
+
+.log-viewer-top {
+	padding: 10px;
+	border-bottom: 2px solid black;
+	border-radius: 50px;
+}
+
+.log-viewer-author, .log-viewer-title, .log-viewer-content {
+	font-family: 'Marmelad', sans-serif;
+}
+
+.log-viewer-author, .log-viewer-title {
+	color: #900900;
+	margin: 10px auto;
+}
+
+
+.log-viewer-author {
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.log-viewer-title {
+	font-size: 30px;
+}
+
+.log-viewer-navigation > div {
+	margin: 0 auto;
+	width: 75%;
+	display: flex;
+	justify-content: space-around;
+}
+
+.log-viewer-content {
+	padding: 20px;
+	overflow-x: wrap;
+	word-break: break-word;
+}
