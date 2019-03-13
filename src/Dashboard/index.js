@@ -17,6 +17,7 @@ class Dashboard extends React.Component {
 			logs: [],
 			userLogs: [],
 			messages: [],
+			header: 'header-wrap',
 			unread: undefined,
 			account: {
 				_id: undefined,
@@ -86,6 +87,7 @@ class Dashboard extends React.Component {
 			this.allDisplayNone()
 			this.setState({
 				dashClassName: 'logs-dash',
+				header: 'header-wrap',
 				logs: logsResponse.data
 			})
 			this.getUser()
@@ -150,8 +152,16 @@ class Dashboard extends React.Component {
 			accountProfileClassName: 'display-none',
 			newLogClassName: 'display-none',
 			editLogClassName: 'display-none',
-			newMessageFormClassName: 'display-none'
+			newMessageFormClassName: 'display-none',
+			inboxWrapClassName: 'display-none'
 		})
+	}
+	changeHeader = () => {
+		if (this.state.header === 'header-wrap') {
+			this.setState({
+				header: 'header-wrap-thin'
+			})
+		}
 	}
 	showInbox = async (id, e) => {
 		e.preventDefault()
@@ -167,6 +177,7 @@ class Dashboard extends React.Component {
 			}
 			const response = await inbox.json();
 			this.allDisplayNone()
+			this.changeHeader()
 			this.setState({
 				messages: response.data,
 				inboxWrapClassName: "inbox",
@@ -180,6 +191,7 @@ class Dashboard extends React.Component {
 	showMessageForm = (id, e) => {
 		e.preventDefault()
 		this.allDisplayNone()
+		this.changeHeader()
 		this.setState({
 			newMessageFormClassName: "message-form",
 			newMessage: {
@@ -286,7 +298,8 @@ class Dashboard extends React.Component {
 	showNewLogForm = () => {
 		this.setState({
 			newLogClassName: "logs-new",
-			dashClassName: "display-none"
+			dashClassName: "display-none",
+			header: 'header-wrap-thin'
 		})
 	}
 	postNewLog = async (e) => {
@@ -317,6 +330,7 @@ class Dashboard extends React.Component {
 		this.setState({
 			editLogClassName: "logs-edit",
 			openLogView: false,
+			accountProfileClassName: "display-none",
 			editLog: {
 				id: log.id,
 				date: log.date,
@@ -399,6 +413,7 @@ class Dashboard extends React.Component {
 				throw Error(getLog.statusText)
 			}
 			const response = await getLog.json();
+			this.changeHeader()
 			this.setState({
 				viewingLog: response.data,
 				openLogView: true,
@@ -424,6 +439,7 @@ class Dashboard extends React.Component {
 			}
 			const response = await userProfile.json();
 			this.allDisplayNone()
+			this.changeHeader()
 			this.setState({
 				account: response.data.user,
 				userLogs: response.data.logs,
@@ -453,6 +469,7 @@ class Dashboard extends React.Component {
 				throw Error(account.statusText)
 			}
 			const response = await account.json();
+			this.changeHeader()
 			this.setState({
 				account: response.data,
 				accountSettingsClassName: "account-settings",
@@ -582,7 +599,8 @@ class Dashboard extends React.Component {
 		return (
 			<div className="dash-wrap">
 				<div className="header">
-					<Header account={this.state.account}
+					<Header header={this.state.header}
+					account={this.state.account}
 					unread={this.state.unread}
 					getDash={this.getDash} logout={this.handleLogout}
 					showUserProfile={this.showUserProfile}
@@ -600,6 +618,7 @@ class Dashboard extends React.Component {
 				<div className={this.state.accountProfileClassName}>
 					<Profile account={this.state.account}
 					userLogs={this.state.userLogs}
+					editLog={this.showEditLogForm}
 					showMessageForm={this.showMessageForm}
 					closeProfile={this.closeProfile}
 					rateUp={this.rateUp} rateDown={this.rateDown}
@@ -615,7 +634,8 @@ class Dashboard extends React.Component {
 					<EditLog editLog={this.state.editLog}
 					removeLog={this.removeLog}
 					closeForm={this.displayDash}
-					handleChange={this.handleChangeEditLog}
+					handleChange={this.handleChange
+					}
 					updateLog={this.updateLog} />
 				</div>
 				<div className={this.state.accountSettingsClassName}>

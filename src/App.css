@@ -38,7 +38,7 @@ a {
 
 body {
   max-width: 1000px;
-  min-width: 600px;
+  min-width: 800px;
   min-height: 100vh;
   margin: 0 auto;
   border: 2px solid black;
@@ -47,7 +47,7 @@ body {
 }
 
 html {
-  background-color: rgba(255, 255, 255);
+  background-color: #402474;
   height: 100%;
   margin: 0;
 }
@@ -73,6 +73,15 @@ input {
 
 label {
   padding-bottom: 10px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style-type: none
 }
 
 @keyframes App-logo-spin {

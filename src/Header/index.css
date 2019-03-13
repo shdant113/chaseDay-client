@@ -1,13 +1,11 @@
-.header {
-	display: block;
-	border-bottom: 1px solid black;
-	height: 70vh;
-}
-
 .header-wrap {
 	background-image: url('/images/chasedayheadbkg1.jpg');
 	background-size: cover;
 	min-height: 512px;
+}
+
+.header-wrap-thin {
+	height: 100px;
 }
 
 .nav-wrap {

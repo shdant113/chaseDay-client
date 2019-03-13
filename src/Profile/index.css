@@ -1,0 +1,47 @@
+.profile-wrap {
+	margin: 0;
+	width: 100%;
+}
+
+.profile-top {
+	max-height: 300px;
+}
+
+.cover-photo {
+	width: 100%;
+	height: fill;
+}
+
+.profile-intro {
+	display: flex;
+	margin: 20px 5%;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.profile-user-text > h3 {
+	margin: 30px;
+}
+
+.profile-info {
+	margin-left: 30px;
+}
+
+.profile-user-text {
+	font-family: 'Marmelad', sans-serif;
+	font-size: 50px;
+}
+
+.profile-photo-profile {
+	height: 250px;
+    width: 250px;
+    border-radius: 125px;
+    border: 1px solid black;
+    vertical-align: middle;
+}
+
+.logs {
+	border-top: 2px solid black;
+	border-radius: 100px;
+	margin-top: 20px;
+}

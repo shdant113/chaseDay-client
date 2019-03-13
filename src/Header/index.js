@@ -13,8 +13,18 @@ const Header = (props) => {
 			)
 		}
 	}
+	const renderLogo = () => {
+		if (props.header === 'header-wrap') {
+			return (
+				<span className='head'>
+					<div className='head-title1'>Chase</div>
+					<div className='head-title2'>Day</div>
+				</span>
+			)
+		}
+	}
 	return (
-		<div className='header-wrap'>
+		<div className={props.header}>
 			<header className='header'>
 				<div className='nav-wrap'>
 					<div className='nav'>
@@ -30,10 +40,7 @@ const Header = (props) => {
 						{ renderContent() }
 					</div>
 				</div>
-				<span className='head'>
-					<div className='head-title1'>Chase</div>
-					<div className='head-title2'>Day</div>
-				</span>
+				{ renderLogo() }
 			</header>
 		</div>
 	)

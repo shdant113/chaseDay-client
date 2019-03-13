@@ -1,54 +1,67 @@
 import React from 'react';
+import './index.css';
 
 const Profile = (props) => {
 	const logs = props.userLogs.map((log, i) => {
-		if (log.user.id !== props.account.id) {
-			return <div key={log.id}>
-				<img src={log.user.profilePhoto} alt={log.user.username} /><br />
-				Log written by {log.user.firstName} {log.user.lastName} <br />
-				{log.title} <br />
-				{log.createdAt.toString()} <br />
-				{log.content} <br /><br />
-				<button onClick={props.readLog.bind(null, log.id)}>Expand</button>
-				<button onClick={props.showMessageForm.bind(null, log.user_id)}>
-				Send {log.user.firstName} {log.user.lastName} a messaage</button>
-				<br /><br />
-			</div>
-		} else {
-			return <div key={log.id}>
-				<img src={log.user.profilePhoto} alt={log.user.username} /><br />
-				Log written by {log.user.firstName} {log.user.lastName} <br />
-				{log.title} <br />
-				{log.createdAt.toString()} <br />
-				{log.content} <br /><br />
-				<button onClick={props.readLog.bind(null, log.id)}>Expand</button>
-				<br /> <br />
-			</div>
+		const renderContent = () => {
+			if (log.user.id !== props.account.id) {
+				return (
+					<a href='' className="a" onClick={props.showMessageForm.bind(null, log.user.id)}>
+						Send {log.user.firstName} {log.user.lastName} a message
+					</a>
+				)
+			} else {
+				return (
+					<a href='' className="a" onClick={props.editLog.bind(null, log)}>
+						Edit Log
+					</a>
+				)
+			}
 		}
+		return (
+			<div className="log-card" key={log.id}>
+				<div className="log-top">
+					<img className="profile-photo" src={log.user.profilePhoto}
+						alt={log.user.username} />
+					<div className="log-title">
+						<h5 className="author">
+							Log written by {log.user.firstName} {log.user.lastName}
+						</h5>
+						{ renderContent() }
+						<h1>{log.title}</h1>
+						<h3>{log.date}</h3>
+					</div>
+				</div>
+				<div className="content">
+					<p>{log.content}</p>
+				</div>
+				<div className="log-navigator">
+					<a className="a" onClick={props.readLog.bind(null, log.id)}>Expand</a>
+				</div>
+			</div>
+		)
 	})
 	return (
 		<div className="profile-wrap">
-			<h1>{props.account.firstName} {props.account.lastName}'s Profile</h1>
-			<button onClick={props.closeProfile}>Go back to dash!</button>
-			<div className="user-profile">
-				<div className="profile-photo">
-					<img src={props.account.profilePhoto} alt={props.account.username} />
+			<div className="user-profile-static">
+				<div className="profile-top">
+					<img className="cover-photo" src={props.account.coverPhoto} 
+						alt={props.account.username} />
 				</div>
-				<br />
-				<div className="cover-photo">
-					<img src={props.account.coverPhoto} alt={props.account.username} />
+				<div className="profile-intro">
+					<div>
+						<img className="profile-photo-profile" src={props.account.profilePhoto} 
+							alt={props.account.username} />
+					</div>
+					<div className="profile-user-text">
+						<h3>{props.account.firstName} {props.account.lastName}</h3>
+						<div className="profile-info">
+							<h5 className="profile-bio">
+								{props.account.bio}
+							</h5>
+						</div>
+					</div>
 				</div>
-				<br /><br />
-				<h3>{props.account.firstName} {props.account.lastName}</h3>
-				<h5>{props.account.username}</h5>
-				<ul>
-					<li>{props.account.facebook}</li>
-					<li>{props.account.twitter}</li>
-					<li>{props.account.youtube}</li>
-				</ul>
-				<p>{props.account.firstName} {props.account.lastName} has 
-				been a member since {props.account.createdAt}.</p>
-				<br />
 				<div className="profile-video">
 					<iframe width="640" height="390" 
 					title="profile-video"
@@ -57,17 +70,13 @@ const Profile = (props) => {
 					allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
 					allowFullScreen />
 				</div>
-				<br />
-				<p>A little about {props.account.firstName} {props.account.lastName}:
-				<br /> 
-				{props.account.bio}</p>
 			</div>
-			<div className="user-logs">
-				<ul>
-					{logs}
-				</ul>
+			<div className="logs">
+				<h3 className="profile-logs-intro">
+					{props.account.firstName} {props.account.lastName}'s Logs
+				</h3>
+				{logs}
 			</div>
-			<div></div>
 		</div>
 	)
 }
