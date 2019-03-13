@@ -1,10 +1,10 @@
 import React from 'react';
+import './index.css';
 
 const MessageForm = (props) => {
 	return (
 		<div className="message-form-wrap">
-			<h1>New Message</h1>
-			<button onClick={props.closeForm}>Go back to my dash!</button>
+			<h1 className="new-message-h1">New Message</h1>
 			<div>
 				<form className="message-form" onSubmit={props.sendMessage}>
 					<label>Content: <br />
