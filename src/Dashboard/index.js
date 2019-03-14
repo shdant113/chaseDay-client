@@ -36,6 +36,23 @@ class Dashboard extends React.Component {
 				coverPhoto: '',
 				profileVideo: ''
 			},
+			userToShow: {
+				_id: undefined,
+				username: '',
+				email: '',
+				firstName: '',
+				lastName: '',
+				location: '',
+				facebook: '',
+				twitter: '',
+				youtube: '',
+				signature: '',
+				bio: '',
+				createdAt: undefined,
+				profilePhoto: '',
+				coverPhoto: '',
+				profileVideo: ''
+			},
 			newLog: {
 				content: '',
 				date: '',
@@ -441,7 +458,7 @@ class Dashboard extends React.Component {
 			this.allDisplayNone()
 			this.changeHeader()
 			this.setState({
-				account: response.data.user,
+				userToShow: response.data.user,
 				userLogs: response.data.logs,
 				accountProfileClassName: "account-profile"
 			})
@@ -616,7 +633,7 @@ class Dashboard extends React.Component {
 					</div>
 				</div>
 				<div className={this.state.accountProfileClassName}>
-					<Profile account={this.state.account}
+					<Profile account={this.state.userToShow}
 					userLogs={this.state.userLogs}
 					editLog={this.showEditLogForm}
 					showMessageForm={this.showMessageForm}
